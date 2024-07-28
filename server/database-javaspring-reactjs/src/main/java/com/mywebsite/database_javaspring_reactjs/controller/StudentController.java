@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.controller;
+package com.mywebsite.database_javaspring_reactjs.controller;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mywebsite.spring_react_studentdatabase.model.Student;
-import com.mywebsite.spring_react_studentdatabase.model.StudentDTO;
-import com.mywebsite.spring_react_studentdatabase.model.StudentResponse;
-import com.mywebsite.spring_react_studentdatabase.service.IStudentService;
+import com.mywebsite.database_javaspring_reactjs.model.PageResponse;
+import com.mywebsite.database_javaspring_reactjs.model.Student;
+import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.service.IStudentService;
 
 import lombok.AllArgsConstructor;
 
@@ -31,12 +31,13 @@ public class StudentController {
 
     // Get All Students
     @GetMapping("")
-    public ResponseEntity<StudentResponse> getStudents(
+    public ResponseEntity<PageResponse<StudentDTO>> getStudents(
         @RequestParam(value="search", defaultValue="", required=false) String search,
         @RequestParam(value="pageNumber", defaultValue="0", required=false) int pageNumber
     ) {
         // Query
-        StudentResponse listStudents = studentService.getAllStudents(search, pageNumber);
+        PageResponse<StudentDTO> listStudents = studentService.getAllStudents(search, pageNumber);
+        
         // ResponseEntity
         return new ResponseEntity<>(
             listStudents,

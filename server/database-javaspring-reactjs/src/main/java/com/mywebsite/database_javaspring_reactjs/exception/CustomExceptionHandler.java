@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.exception;
+package com.mywebsite.database_javaspring_reactjs.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

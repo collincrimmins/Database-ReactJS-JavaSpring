@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.service;
+package com.mywebsite.database_javaspring_reactjs.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.mywebsite.spring_react_studentdatabase.exception.StudentAlreadyExistsException;
-import com.mywebsite.spring_react_studentdatabase.exception.StudentNotFoundException;
-import com.mywebsite.spring_react_studentdatabase.model.Student;
-import com.mywebsite.spring_react_studentdatabase.model.StudentDTO;
-import com.mywebsite.spring_react_studentdatabase.model.StudentResponse;
-import com.mywebsite.spring_react_studentdatabase.repository.StudentRepository;
+import com.mywebsite.database_javaspring_reactjs.exception.StudentAlreadyExistsException;
+import com.mywebsite.database_javaspring_reactjs.exception.StudentNotFoundException;
+import com.mywebsite.database_javaspring_reactjs.model.PageResponse;
+import com.mywebsite.database_javaspring_reactjs.model.Student;
+import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.repository.StudentRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -24,14 +24,14 @@ public class StudentService implements IStudentService {
 
     // Get All Students using Query & Pagination
     @Override
-    public StudentResponse getAllStudents(String search, int pageNumber) {
+    public PageResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
         int PAGE_SIZE = 10;
 
         // Query & Pagination
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         Page<Student> pageStudents = null;
         if (search.equals("")) {
-            pageStudents = studentRepository.getStudents(pageable); // studentRepository.findAll(pageable);
+            pageStudents = studentRepository.getStudents(pageable);
         } else {
             pageStudents = studentRepository.getStudentsByQuery(search, pageable);
         }
@@ -42,16 +42,15 @@ public class StudentService implements IStudentService {
             .map(student -> mapToDTO(student))
             .collect(Collectors.toList());
 
-        // Get Pagination Response Object
-        StudentResponse studentResponse = new StudentResponse();
-        studentResponse.setContent(content);
-        studentResponse.setPageNumber(pageStudents.getNumber());
-        studentResponse.setPageSize(pageStudents.getSize());
-        studentResponse.setTotalElements(pageStudents.getTotalElements());
-        studentResponse.setTotalPages(pageStudents.getTotalPages());
-        studentResponse.setLast(pageStudents.isLast());
+        // Create Pagination Response Object
+        PageResponse<StudentDTO> responsePage = new PageResponse<>();
+        responsePage.setContent(content);
+        responsePage.setPageNumber(pageStudents.getNumber());
+        responsePage.setPageSize(pageStudents.getSize());
+        responsePage.setTotalPages(pageStudents.getTotalPages());
+        responsePage.setTotalElements(pageStudents.getTotalElements());
         
-        return studentResponse;
+        return responsePage;
     }
 
     // Get Student by ID

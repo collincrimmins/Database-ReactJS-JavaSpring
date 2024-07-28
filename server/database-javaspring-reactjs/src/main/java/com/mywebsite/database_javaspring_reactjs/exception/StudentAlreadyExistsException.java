@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.exception;
+package com.mywebsite.database_javaspring_reactjs.exception;
 
 public class StudentAlreadyExistsException extends RuntimeException {
     public StudentAlreadyExistsException(String message) {

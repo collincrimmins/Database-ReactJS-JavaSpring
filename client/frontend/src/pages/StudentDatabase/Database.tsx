@@ -27,9 +27,7 @@ export default function Database() {
     const [pageResult, setPageResult] = useState({
         pageNumber: 0,
         pageSize: 0,
-        totalElements: 0,
-        totalPages: 0,
-        last: false,
+        totalPages: 0
     })
     const search = searchParams.get("search") || ""
     const pageNumber = Number(searchParams.get("pageNumber") || 0)
@@ -41,20 +39,15 @@ export default function Database() {
     }
 
     // Load Students at Start
-    useEffect(() => {
-        fetchAllStudents()
-    }, [])
-
     // Update Students on Params Update
-    // ???
     useEffect(() => {
-        fetchAllStudents()
+       fetchAllStudents()
     }, [searchParams])
 
     // Get All Students
     async function fetchAllStudents() {
         setLoading(true)
-        
+
         try {
             // Fetch
             const params = new URLSearchParams(getSearchParams())
@@ -225,21 +218,21 @@ export default function Database() {
 
     // Search Bar
     function SearchBar() {    
-        // Set Search Params in URL
-        function runSubmit() {
-            // Navigate
+        // Set Search Params in URL - Get Params & Push New Params
+        function runSubmitForm(e : React.FormEvent) {
+            e.preventDefault()
+
             const searchText = searchRef.current?.value || ""
-            // Get Params & Push New Params
             let newSearchParams = getSearchParams()
             newSearchParams["search"] = searchText
             newSearchParams["pageNumber"] = String(0)
             setSearchParams(newSearchParams)
         }
-    
+
         return (
             <form 
                 className="SearchBarForm"
-                onSubmit={runSubmit}
+                onSubmit={runSubmitForm}
             >
                 <input
                     className="StudentSearchBar"
@@ -253,6 +246,7 @@ export default function Database() {
                 <img
                     className="SearchSubmitButton" 
                     src={SearchIcon}
+                    onClick={runSubmitForm}
                 >
                 </img>
             </form>

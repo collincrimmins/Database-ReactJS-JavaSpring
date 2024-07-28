@@ -1,16 +1,15 @@
-package com.mywebsite.spring_react_studentdatabase.model;
+package com.mywebsite.database_javaspring_reactjs.model;
 
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class Response<T> {
+public class PageResponse<T> {
     private List<T> content;
     
     private int pageNumber;
     private int pageSize;
-    private long totalElements;
     private int totalPages;
-    private boolean last;
+    private Long totalElements;
 }

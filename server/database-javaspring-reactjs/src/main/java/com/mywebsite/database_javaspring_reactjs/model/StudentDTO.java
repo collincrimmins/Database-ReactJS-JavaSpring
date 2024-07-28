@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.model;
+package com.mywebsite.database_javaspring_reactjs.model;
 
 import lombok.Data;
 

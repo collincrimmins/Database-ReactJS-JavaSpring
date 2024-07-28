@@ -1,13 +1,13 @@
-package com.mywebsite.spring_react_studentdatabase;
+package com.mywebsite.database_javaspring_reactjs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringReactStudentdatabaseApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringReactStudentdatabaseApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }

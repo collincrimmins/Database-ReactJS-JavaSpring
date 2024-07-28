@@ -1,4 +1,4 @@
-package com.mywebsite.spring_react_studentdatabase.repository;
+package com.mywebsite.database_javaspring_reactjs.repository;
 
 import java.util.Optional;
 
@@ -7,8 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.mywebsite.spring_react_studentdatabase.model.Student;
-import com.mywebsite.spring_react_studentdatabase.model.StudentResponse;
+import com.mywebsite.database_javaspring_reactjs.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     // https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
@@ -16,10 +15,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     // Get by Field "email"
     Optional<Student> findByEmail(String email);
 
-    // Get All Students
+    // Get All Students with no Search Query
     @Query(
         value = "SELECT * FROM student",
-        countQuery = "SELECT count(*) FROM student",
+        countQuery = "SELECT count(1) FROM student",
         nativeQuery = true)
     Page<Student> getStudents(Pageable pageable);
 
@@ -34,7 +33,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                 OR email LIKE %:search%
         """,
         countQuery = """
-            SELECT COUNT(*) 
+            SELECT COUNT(1) 
             FROM student 
             WHERE firstName LIKE %:search%
                 OR lastName LIKE %:search%
