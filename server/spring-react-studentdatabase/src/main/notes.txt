@@ -1,0 +1,12 @@
+PATHS & PARAMS
+path: used to query a resource/model, using unchanging identifying fields like "id"
+params: used to filter/sort a query
+
+PAGINATION
+Page<T> - knows all pages, and triggers a countQuery
+Slice<T> - only knows if the next slice is available or not
+List<T>
+Page and Sort, at the same time?
+    Pageable sortedByPriceDescNameAsc = 
+        PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
+    (https://www.baeldung.com/spring-data-jpa-pagination-sorting)

@@ -1,0 +1,355 @@
+.Body {
+    /* Flex */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    /* Size */
+    width: 95%;
+    /* Margin */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* Padding */
+    padding-top: 0px;
+    padding: 20px;
+    /* Gap */
+    gap: 10px;
+    /* Border */
+    border: 1px solid rgb(0, 0, 0);
+}
+
+/* Navbar */
+
+.PageHeader {
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.PageNavbar {
+    /* Flex */
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    justify-content: left;
+    /* Size */
+    width: 100%;
+    height: 40px;
+    /* Gap */
+    gap: 15px;
+}
+
+.PageNavbarButton {
+    background-color: rgb(209, 209, 209) !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 1.5rem;
+    border: none;
+    border: 2px solid rgb(209, 209, 209);
+    cursor: pointer;
+    border-radius: 5px;
+    /* Center */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.PageNavbarButtonImage {
+    /* Size */
+    width: 100%;
+    height: 100%;
+}
+
+.PageNavbarButton:hover {
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.288);
+}
+
+.PageNavbarButtonActive {
+    border: 2px solid rgb(0, 0, 0);
+}
+
+/* Student */
+
+.StudentsPage {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.StudentSearchBar {
+    width: 100%;
+    height: 100%;
+    font-size: 1.25rem;
+    padding-left: 5px;
+}
+
+.SearchBarForm {
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    gap: 20px;
+}
+
+.SearchSubmitButton {
+    width: 100px;
+    object-fit:contain;
+    padding: 5px;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(206, 206, 206);
+    color: white;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+.StudentFrame {
+    /* Flex */
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    justify-content: left;
+    align-items: center;
+    /* Size */
+    width: 100%;
+    height: 50px;
+}
+
+.StudentFrameHeader {
+    /* Flex */
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    justify-content: left;
+    align-items: center;
+    /* Size */
+    width: 100%;
+    height: 50px;
+    /* Gap */
+    font-weight: bold;
+}
+
+.StudentFrameBox {
+    display: flex;
+    flex-basis: 100%; /* Size Children evenly with Flex */
+    height: 100%;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(233, 233, 233);
+    align-items: center;
+    justify-content: center;
+    overflow:hidden;
+}
+
+/* .StudentFrameEvenRowColor {
+    background-color: rgb(34, 34, 34);
+} */
+
+.StudentFrameActionButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    
+}
+
+.StudentFrameActionButton {
+    width: 75;
+    max-width: 75;
+    height: 65%;
+    cursor: pointer;
+}
+
+.ViewIcon {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 25%;
+    background-color: rgb(224, 224, 224);
+}
+
+.EditIcon {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 25%;
+    background-color: rgb(0, 225, 255);
+}
+
+.DeleteIcon {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 25%;
+    background-color: rgb(255, 0, 0);
+}
+
+/* Pagination Buttons */
+
+.NavigatePaginationInfo{
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.NavigateButtonsRow {
+    display: flex;
+    width: 100%;
+    height: 35px;
+    gap: 25px;
+}
+
+.NavigateButtonsForward {
+    width: 10%;
+    background-color: rgb(206, 206, 206);
+    color: black;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    font-size: x-large;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    /* Position */
+    margin-right: auto;
+}
+
+.NavigateButtonsBackward {
+    width: 10%;
+    background-color: rgb(206, 206, 206);
+    color: black;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    font-size: x-large;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    /* Position */
+    margin-left: auto;
+}
+
+/* View Student */
+
+.ViewStudentsPage {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ViewStudentRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    width: 100%;
+    height: auto;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.ViewStudentLineDivider {
+    width: 100%;
+    height: 1px;
+    background-color: rgb(197, 197, 197);
+}
+
+.ViewStudentTitle {
+    font-weight: bold;
+}
+
+.CloseButtonRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.ViewStudentCloseButton {
+    min-height: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    border: 2px solid rgb(119, 0, 0);;
+    background-color: rgb(255, 0, 0);
+    border-radius: 5px;
+    color: white;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Add/Edit Student */
+
+.AddStudentPage {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.AddStudentFormLabel {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.AddStudentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.AddSuccessMessage {
+    /* Box */
+    background: rgba(0, 255, 21, 0.329);
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid rgb(0, 255, 21);
+    /* Text */
+    color: black;
+    font-weight: bold;
+    /* Center Items */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    /* Padding */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.AddErrorMessage {
+    background: rgba(253, 0, 0, 0.274);
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid red;
+    /* Text */
+    color: black;
+    font-weight: bold;
+    /* Center Items */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    /* Padding */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.StudentFormHeader {
+    font-size: 2rem;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}

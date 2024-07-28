@@ -1,0 +1,170 @@
+.Navbar {
+  /* position: fixed; Keep Header visable at All Times */
+  width: 100%;
+  height: 50px;
+  top: 0;
+  background-color: #e2e2e2;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.AppHeaderLogo {
+  width: auto;
+  height: 90%;
+}
+
+.AppHeaderLogo:hover {
+  opacity: 0.8;
+}
+
+.HomeNavbarItem {
+  margin-left: 5px;
+  font-size: 2rem;
+  font-weight: bolder;
+  display: flex;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0)(255, 255, 255);
+  /* padding: .25rem; */
+}
+
+.NavbarItem {
+  color: rgb(0, 0, 0);
+  font-size: 1.25rem;
+  margin: auto;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0);
+  /* padding: .25rem; */
+}
+
+.NavbarItemActive {
+  height: 60%;
+  margin: auto;
+  /* Box */
+  color: rgb(255, 255, 255);
+  background-color: rgb(104, 104, 104);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Width */
+  width: auto;
+}
+
+/* Account Frame */
+
+.AccountFrame {
+  font-size: 1.25rem;
+  font-weight: bold;
+  height: 80%;
+  border: 0px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  /* Box */
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Cursor */
+  cursor: pointer;
+}
+
+.AccountProfileIcon {
+  height: 100%;
+  width: auto;
+}
+
+/* Drop Down */
+
+.DropdownMenu {
+  width: 140px;
+  height: auto;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(156, 156, 156);
+  box-shadow: rgba(100, 100, 111, 0.2) 2px 2px 20px 2px;
+  border-radius: 5px;
+  /* Offset */
+  margin-top: 60px;
+  /* Position */
+  position: absolute;
+  left: auto;
+  right: 10px;
+  padding-right: 10px;
+  /* Children */
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+}
+
+.DropdownMenuHeader {
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.DropdownMenu button {
+  background-color: transparent;
+  border: 0px;
+  /* border: 1px solid rgb(235, 235, 235); */
+  height: 100%;
+  width: 100%;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.MenuDivider {
+  height: 2px;
+  background-color: rgb(235, 235, 235);
+}
+
+.DropdownMenu ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0px;
+  padding: 0px;
+  padding-bottom: 5px;
+}
+
+.DropdownMenu ul button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Navbar */
+
+.Navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  padding-right: 10px;
+}
+
+.NavbarItem:hover {
+  text-decoration: underline;
+}
+
+.account-button:hover {
+  text-decoration: underline;
+}
