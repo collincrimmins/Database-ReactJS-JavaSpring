@@ -38,11 +38,22 @@ export default function Database() {
         }
     }
 
-    // Load Students at Start
-    // Update Students on Params Update
+    // Load Students at Start & Update Students on Params Update
     useEffect(() => {
        fetchAllStudents()
     }, [searchParams])
+
+    // Set PageNumber if pageNumber > totalPages (such as when Deleting)
+    useEffect(() => {
+        if (pageResult.pageNumber >= pageResult.totalPages) {
+            if (pageResult.pageNumber > 0) {
+                // Get Params & Push New Params
+                let newSearchParams = getSearchParams()
+                newSearchParams["pageNumber"] = String(pageResult.pageNumber - 1)
+                setSearchParams(newSearchParams)
+            }
+        }
+    }, [pageResult])
 
     // Get All Students
     async function fetchAllStudents() {
@@ -157,7 +168,7 @@ export default function Database() {
         let pageNum = pageResult.totalPages > 0 ? pageResult.pageNumber + 1 : 0
         return (
             <div>
-                {pageNum} / {pageResult.totalPages}
+                {Math.max(pageNum, 1)} / {Math.max(pageResult.totalPages, 1)}
             </div>
         )
     }

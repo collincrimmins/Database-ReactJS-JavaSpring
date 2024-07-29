@@ -64,7 +64,7 @@ export default function AddStudent() {
 
     // Create Testing Data
     async function runTestingData() {
-        for (let i = 0 ; i < 10; i++) {
+        for (let i = 0 ; i < 1; i++) {
             let email = (Math.random() * 10000).toString() + "@gmail.com"
             fetchAddStudent("Bob", "Smith", email!)
         }
@@ -79,21 +79,24 @@ export default function AddStudent() {
                 lastName: last,
                 email: email,
             }
-            const response = await fetch("http://localhost:8080/students", {
+            const response = await fetch("http://localhost:8080/students/new", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
                 },
                 body: JSON.stringify(body)
             })
+            const data = await response.json()
 
             // Set Success Message
+            setSuccessMessage(false)
+            setErrorMessage("")
             if (response.ok) {
                 setSuccessMessage(true)
-                setErrorMessage("")
+            } else if (data.message == "email-in-use") {
+                setErrorMessage("This Email is already in use.")
             } else {
                 setErrorMessage("There was an Error with the Server.")
-                setSuccessMessage(false)
             }
         } catch {}
     }

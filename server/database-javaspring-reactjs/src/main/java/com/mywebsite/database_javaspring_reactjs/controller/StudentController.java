@@ -1,7 +1,5 @@
 package com.mywebsite.database_javaspring_reactjs.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mywebsite.database_javaspring_reactjs.model.PageResponse;
-import com.mywebsite.database_javaspring_reactjs.model.Student;
 import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
+import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
 import com.mywebsite.database_javaspring_reactjs.service.IStudentService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @CrossOrigin("http://localhost:5173")
@@ -38,32 +37,31 @@ public class StudentController {
         // Query
         PageResponse<StudentDTO> listStudents = studentService.getAllStudents(search, pageNumber);
         
-        // ResponseEntity
-        return new ResponseEntity<>(
-            listStudents,
-            HttpStatus.OK
-        );
+        return ResponseEntity.ok(listStudents);
     }
 
-    // ***
-    // ADD PATH /new
-    // ***
     // Create New Student
-    @PostMapping("")
-    public void addStudent(@RequestBody StudentDTO studentDTO) {
+    @PostMapping("/new")
+    public ResponseEntity<JsonResponse> addStudent(@Valid @RequestBody StudentDTO studentDTO) {
         studentService.createStudent(studentDTO);
+
+        return ResponseEntity.ok(new JsonResponse("created-student"));
     }
 
     // Update Student by ID
     @PutMapping("/update/{id}")
-    public StudentDTO updateStudent(@RequestBody StudentDTO studentDTO, @PathVariable Long id) {
-        return studentService.updateStudent(studentDTO, id);
+    public ResponseEntity<JsonResponse> updateStudent(@Valid @RequestBody StudentDTO studentDTO, @PathVariable Long id) {
+        studentService.updateStudent(studentDTO, id);
+
+        return ResponseEntity.ok(new JsonResponse("updated-student"));
     }
 
     // Delete Student by ID
     @DeleteMapping("/delete/{id}")
-    public void deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<JsonResponse> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
+
+        return ResponseEntity.ok(new JsonResponse("deleted-student"));
     }
 
     // Get Student by ID

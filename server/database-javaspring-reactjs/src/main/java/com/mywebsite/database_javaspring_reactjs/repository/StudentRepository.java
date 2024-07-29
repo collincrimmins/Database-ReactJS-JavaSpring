@@ -10,9 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.mywebsite.database_javaspring_reactjs.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    // https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
-
-    // Get by Field "email"
+    // JPA Function Queries
     Optional<Student> findByEmail(String email);
 
     // Get All Students with no Search Query
@@ -43,3 +41,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         nativeQuery = true)
     Page<Student> getStudentsByQuery(String search, Pageable pageable);
 }
+
+// https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html

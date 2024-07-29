@@ -1,21 +1,23 @@
 package com.mywebsite.database_javaspring_reactjs.service;
 
-import com.mywebsite.database_javaspring_reactjs.model.PageResponse;
+import org.springframework.http.ResponseEntity;
+
 import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
 
 public interface IStudentService {
     // Get List<>
     PageResponse<StudentDTO> getAllStudents(String search, int pageNumber);
 
-    // Get 1
+    // Get
     StudentDTO getStudentById(Long id);
 
     // Post
-    void createStudent(StudentDTO studentDTO);
+    String createStudent(StudentDTO studentDTO);
 
     // Put
-    StudentDTO updateStudent(StudentDTO student, Long id);
+    void updateStudent(StudentDTO student, Long id);
 
     // Delete
-    void deleteStudent(Long id);
+    String deleteStudent(Long id);
 }

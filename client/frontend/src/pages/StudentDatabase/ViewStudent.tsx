@@ -40,7 +40,7 @@ export default function ViewStudent() {
                 method: "GET",
             })
             const data = await response.json()
-
+            
             if (!response.ok) {throw new Error()}
 
             // Check Data with Zod

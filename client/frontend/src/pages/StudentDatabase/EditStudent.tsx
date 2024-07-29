@@ -117,16 +117,21 @@ export default function EditStudent() {
                 },
                 body: JSON.stringify(body)
             })
+            const data = await response.json()
             
-            // Set Success Message
+            // Set Success/Error Message
+            setSuccessMessage("")
+            setErrorMessage("")
             if (response.status == 200) {
-                setSuccessMessage("Successfully updated User #" + data?.id + ".")
-                setErrorMessage("")
+                setSuccessMessage("Successfully updated student.")
+            } else if (data.message == "email-in-use") {
+                setErrorMessage("This Email is already in use.")
             } else {
                 setErrorMessage("There was an Error with the Server.")
-                setSuccessMessage("")
             }
-        } catch {}
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     // Close Button

@@ -1,4 +1,4 @@
-package com.mywebsite.database_javaspring_reactjs.model;
+package com.mywebsite.database_javaspring_reactjs.responses;
 
 import java.util.List;
 
