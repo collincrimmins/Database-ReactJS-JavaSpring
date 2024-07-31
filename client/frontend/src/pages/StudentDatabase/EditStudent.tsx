@@ -5,9 +5,9 @@ import {useNavigate} from "react-router-dom";
 import "../../css/App.css"
 import "../../css/Students.css"
 
-import Layout from './Layout.js'
+import Layout from './Layout.tsx'
 
-import { LoadingFrameFullScreen} from "../../library/Library.js"
+import { LoadingFrameFullScreen} from "../../utils/Library.js"
 
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
@@ -123,7 +123,7 @@ export default function EditStudent() {
             setSuccessMessage("")
             setErrorMessage("")
             if (response.status == 200) {
-                setSuccessMessage("Successfully updated student.")
+                setSuccessMessage("Success!")
             } else if (data.message == "email-in-use") {
                 setErrorMessage("This Email is already in use.")
             } else {
@@ -182,7 +182,7 @@ export default function EditStudent() {
                     />
 
                     <button 
-                        className="ButtonRounded ButtonGray ButtonBold ButtonTextLarge" 
+                        className="ButtonRounded ButtonBlue ButtonBold ButtonTextLarge" 
                         onClick={runSubmit}
                         disabled={loading}>
                         Submit

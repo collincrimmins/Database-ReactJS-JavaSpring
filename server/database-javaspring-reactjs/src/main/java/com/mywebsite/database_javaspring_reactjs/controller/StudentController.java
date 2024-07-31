@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
 import com.mywebsite.database_javaspring_reactjs.service.IStudentService;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @CrossOrigin("http://localhost:5173")
@@ -28,7 +27,7 @@ import lombok.AllArgsConstructor;
 public class StudentController {
     private final IStudentService studentService;
 
-    // Get All Students
+    // Get Students
     @GetMapping("")
     public ResponseEntity<PageResponse<StudentDTO>> getStudents(
         @RequestParam(value="search", defaultValue="", required=false) String search,
@@ -40,9 +39,15 @@ public class StudentController {
         return ResponseEntity.ok(listStudents);
     }
 
+    // Get Student by ID
+    @GetMapping("/student/{id}")
+    public StudentDTO getStudentById(@PathVariable Long id) {
+        return studentService.getStudentById(id);
+    }
+
     // Create New Student
     @PostMapping("/new")
-    public ResponseEntity<JsonResponse> addStudent(@Valid @RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<JsonResponse> addStudent(@RequestBody StudentDTO studentDTO) {
         studentService.createStudent(studentDTO);
 
         return ResponseEntity.ok(new JsonResponse("created-student"));
@@ -50,7 +55,7 @@ public class StudentController {
 
     // Update Student by ID
     @PutMapping("/update/{id}")
-    public ResponseEntity<JsonResponse> updateStudent(@Valid @RequestBody StudentDTO studentDTO, @PathVariable Long id) {
+    public ResponseEntity<JsonResponse> updateStudent(@RequestBody StudentDTO studentDTO, @PathVariable Long id) {
         studentService.updateStudent(studentDTO, id);
 
         return ResponseEntity.ok(new JsonResponse("updated-student"));
@@ -62,11 +67,5 @@ public class StudentController {
         studentService.deleteStudent(id);
 
         return ResponseEntity.ok(new JsonResponse("deleted-student"));
-    }
-
-    // Get Student by ID
-    @GetMapping("/student/{id}")
-    public StudentDTO getStudentById(@PathVariable Long id) {
-        return studentService.getStudentById(id);
     }
 }

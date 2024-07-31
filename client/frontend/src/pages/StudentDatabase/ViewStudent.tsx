@@ -5,10 +5,10 @@ import {useNavigate} from "react-router-dom";
 import "../../css/App.css"
 import "../../css/Students.css"
 
-import { LoadingFrameFullScreen } from "../../library/Library.js"
+import { LoadingFrameFullScreen } from "../../utils/Library.js"
 import { useSearchParams } from 'react-router-dom';
 
-import Layout from './Layout.js';
+import Layout from './Layout.tsx'
 
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';

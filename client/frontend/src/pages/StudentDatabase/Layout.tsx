@@ -50,7 +50,7 @@ export default function Layout({children} : {children : React.ReactNode}) {
         <main className = "Body">
             {/* Header */}
             <div className = "PageHeader">
-                User Database
+                Student Database
             </div>
             {/* Select Page Navbar */}
             <div className="PageNavbar">

@@ -13,7 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     // JPA Function Queries
     Optional<Student> findByEmail(String email);
 
-    // Get All Students with no Search Query
+    // Get All Students
     @Query(
         value = "SELECT * FROM student",
         countQuery = "SELECT count(1) FROM student",
@@ -41,5 +41,3 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         nativeQuery = true)
     Page<Student> getStudentsByQuery(String search, Pageable pageable);
 }
-
-// https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html

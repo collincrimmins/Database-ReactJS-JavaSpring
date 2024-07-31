@@ -20,6 +20,10 @@ import RootLayout from './layouts/RootLayout';
 import HomePage from "./pages/Home/Home"
 import AboutPage from "./pages/About/About"
 
+// Auth Page
+import LoginPage from './pages/Auth/Login.js';
+import RegisterPage from './pages/Auth/Register.js';
+
 // Students Page
 import StudentDatabasePage from "./pages/StudentDatabase/Database.jsx";
 import AddStudentPage from "./pages/StudentDatabase/AddStudent.jsx"
@@ -29,14 +33,19 @@ import EditStudentPage from './pages/StudentDatabase/EditStudent.js';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element = {<RootLayout/>}>
-       <Route index element={<HomePage/>}/>
+      <Route index element={<HomePage/>}/>
 
-       <Route path="students" element={<StudentDatabasePage/>}/>
-       <Route path="students/view" element={<ViewStudentPage/>}/>
-       <Route path="students/add-student" element={<AddStudentPage/>}/>
-       <Route path="students/edit" element={<EditStudentPage/>}/>
-       
-       <Route path="about" element={<AboutPage/>}/>
+      {/* Auth */}
+      <Route path="login" element={<LoginPage/>}/>
+      <Route path="register" element={<RegisterPage/>}/>
+
+      {/* Students */}
+      <Route path="students" element={<StudentDatabasePage/>}/>
+      <Route path="students/view" element={<ViewStudentPage/>}/>
+      <Route path="students/add-student" element={<AddStudentPage/>}/>
+      <Route path="students/edit" element={<EditStudentPage/>}/>
+      
+      <Route path="about" element={<AboutPage/>}/>
     </Route>
   )
 );

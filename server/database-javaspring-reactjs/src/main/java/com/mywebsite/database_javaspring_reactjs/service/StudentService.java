@@ -3,20 +3,17 @@ package com.mywebsite.database_javaspring_reactjs.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.catalina.connector.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.Student;
-import com.mywebsite.database_javaspring_reactjs.model.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.repository.StudentRepository;
 import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
 
@@ -26,7 +23,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class StudentService implements IStudentService {
-    private final StudentRepository studentRepository;
+    private final StudentRepository database;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -39,9 +36,9 @@ public class StudentService implements IStudentService {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         Page<Student> pageStudents = null;
         if (search.equals("")) {
-            pageStudents = studentRepository.getStudents(pageable);
+            pageStudents = database.getStudents(pageable);
         } else {
-            pageStudents = studentRepository.getStudentsByQuery(search, pageable);
+            pageStudents = database.getStudentsByQuery(search, pageable);
         }
 
         // Get Content
@@ -64,8 +61,8 @@ public class StudentService implements IStudentService {
     // Get Student by ID
     @Override
     public StudentDTO getStudentById(Long id) {
-        Student student = studentRepository.findById(id)
-            .orElseThrow(() -> new StudentNotFoundException(id + " not found"));
+        Student student = database.findById(id)
+            .orElseThrow(() -> new StudentNotFoundException());
 
         StudentDTO studentDTO = mapToDTO(student);
 
@@ -74,7 +71,7 @@ public class StudentService implements IStudentService {
 
     // Create Student
     @Override
-    public String createStudent(StudentDTO studentDTO) {
+    public void createStudent(@Valid StudentDTO studentDTO) {
         // Check if Email Exists
         if (checkStudentExistsByEmail(studentDTO.getEmail())) {
             throw new StudentEmailRequestAlreadyExists();
@@ -82,25 +79,19 @@ public class StudentService implements IStudentService {
         
         // Create Student
         Student student = mapToEntity(studentDTO);
-        studentRepository.save(student);
-
-        return "created student";
-    }
-
-    private boolean checkStudentExistsByEmail(String email) {
-        return studentRepository.findByEmail(email).isPresent();
+        database.save(student);
     }
 
     // Update Student
     @Override
-    public void updateStudent(StudentDTO studentDTO, Long id) {
-        Student student = studentRepository.findById(id)
-            .orElseThrow(() -> new StudentNotFoundException(id + " does not exist"));
+    public void updateStudent(@Valid StudentDTO studentDTO, Long id) {
+        Student student = database.findById(id)
+            .orElseThrow(() -> new StudentNotFoundException());
 
         // Check if another Student already owns this Email
         if (checkStudentExistsByEmail(studentDTO.getEmail())) {
-            Student studentWithRequestedEmail = studentRepository.findByEmail(studentDTO.getEmail())
-                .orElseThrow(() -> new StudentNotFoundException("email does not exist"));
+            Student studentWithRequestedEmail = database.findByEmail(studentDTO.getEmail())
+                .orElseThrow(() -> new StudentNotFoundException());
             if (student.getId() != studentWithRequestedEmail.getId()) {
                 throw new StudentEmailRequestAlreadyExists();
             }
@@ -110,26 +101,31 @@ public class StudentService implements IStudentService {
         student.setFirstName(studentDTO.getFirstName());
         student.setLastName(studentDTO.getLastName());
         student.setEmail(studentDTO.getEmail());
-        studentRepository.save(student);
+        database.save(student);
     }
 
     // Delete Student by ID
     @Override
-    public String deleteStudent(Long id) {
-        if (!studentRepository.existsById(id)) {
-            throw new StudentNotFoundException(id + " does not exist");
+    public void deleteStudent(Long id) {
+        if (!database.existsById(id)) {
+            throw new StudentNotFoundException();
         }
-        studentRepository.deleteById(id);
-
-        return "deleted student";
+        database.deleteById(id);
     }
 
 
+    
 
 
 
 
 
+
+
+    // Check Student Exists with Email
+    private boolean checkStudentExistsByEmail(String email) {
+        return database.findByEmail(email).isPresent();
+    }
 
     // Map (Entity -> DTO)
     private StudentDTO mapToDTO(Student student) {

@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: database-javaspring-reactjs
   datasource:
@@ -7,8 +9,8 @@ spring:
     password: root
     driverClassName: com.mysql.jdbc.Driver
   jpa:
-    generate-ddl: true
     # show-sql: true
+    generate-ddl: true
     hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
       ddl.auto: update

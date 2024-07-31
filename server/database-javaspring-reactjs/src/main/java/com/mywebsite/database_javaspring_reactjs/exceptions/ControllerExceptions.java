@@ -15,7 +15,7 @@ import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 
 @RestControllerAdvice
 public class ControllerExceptions {
-    // @Valid Invalid Model Parameter
+    // Model Invalid (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException exception) {
@@ -28,17 +28,24 @@ public class ControllerExceptions {
         return errors;
     }
 
-    // Student not found by ID or Email
+    // StudentNotFoundException
     @ExceptionHandler(StudentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<JsonResponse> StudentNotFoundException(StudentNotFoundException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(new JsonResponse(e.getMessage()));
     }
 
-    // Student can not claim this Email
+    // StudentEmailRequestAlreadyExists
     @ExceptionHandler(StudentEmailRequestAlreadyExists.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<JsonResponse> StudentEmailRequestAlreadyExists(StudentEmailRequestAlreadyExists e) {
+        return ResponseEntity.status(e.getHttpStatus()).body(new JsonResponse(e.getMessage()));
+    }
+
+    // UserEmailRequestAlreadyExists
+    @ExceptionHandler(UserEmailRequestAlreadyExists.class)
+    @ResponseStatus(HttpStatus.FOUND)
+    public ResponseEntity<JsonResponse> UserEmailRequestAlreadyExists(UserEmailRequestAlreadyExists e) {
         return ResponseEntity.status(e.getHttpStatus()).body(new JsonResponse(e.getMessage()));
     }
 }

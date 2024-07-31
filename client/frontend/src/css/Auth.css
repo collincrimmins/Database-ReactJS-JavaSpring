@@ -1,0 +1,119 @@
+/* Body */
+
+.BodyAuthPage {
+    /* Center */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    /* Size */
+    width: 500px;
+    max-width: 500px;
+    height: auto;
+}
+
+/* Form */
+
+.BodyForm {
+    /* Flex */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    /* Size */
+    width: 100%;
+    height: auto;
+    /* Margin */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    /* Padding */
+    padding: 25px;
+    /* Gap */
+    gap: 50px;
+    /* Border */
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.BodyFormTop {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 15px;
+}
+
+.BodyFormBottom {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+}
+
+.RegisterText {
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.FormLabel {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.FormHeader {
+    font-size: 2rem;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.FormSuccessMessage {
+    /* Box */
+    background: rgba(0, 255, 21, 0.329);
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid rgb(0, 255, 21);
+    /* Text */
+    color: black;
+    font-weight: bold;
+    /* Center Items */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    /* Padding */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.FormErrorMessage {
+    background: rgba(253, 0, 0, 0.274);
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid red;
+    /* Text */
+    color: black;
+    font-weight: bold;
+    /* Center Items */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    /* Padding */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -6,10 +6,4 @@ PAGINATION
 Page<T> - knows all pages, and triggers a countQuery
 Slice<T> - only knows if the next slice is available or not
 List<T>
-Page and Sort, at the same time?
-    Pageable sortedByPriceDescNameAsc = 
-        PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
-    (https://www.baeldung.com/spring-data-jpa-pagination-sorting)
-
-QUERY
-.findById(id).orElseThrow() - this is an to equivalent to .get() that also throws exception
+https://docs.spring.io/spring-data/jpa/reference/repositories/query-methods-details.html#repositories.scrolling.guidance

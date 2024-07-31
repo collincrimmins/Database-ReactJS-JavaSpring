@@ -1,35 +1,36 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "../../css/App.css"
-import "../../css/Students.css"
+import "../../css/Auth.css"
 
 import Layout from './Layout.tsx'
 
 import { LoadingFrameFullScreen} from "../../utils/Library.js"
 
-export default function AddStudent() {
-    const [successMessage, setSuccessMessage] = useState(false)
+export default function Register() {
+    const [successMessage, setSuccessMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [emptyFields, setEmptyFields] = useState("")
 
     const [loading, setLoading] = useState(false)
 
-    const firstNameRef = useRef<HTMLInputElement>(null)
-    const lastNameRef = useRef<HTMLInputElement>(null)
     const emailRef = useRef<HTMLInputElement>(null)
+    const passwordRef = useRef<HTMLInputElement>(null)
+
+    const navigate = useNavigate()
 
     // Submit Button
     async function runSubmit(e : React.MouseEvent) {
         e.preventDefault()
 
-        let firstName = firstNameRef.current?.value
-        let lastName = lastNameRef.current?.value
         let email = emailRef.current?.value
+        let password = passwordRef.current?.value
 
         // Check Fields
         let invalidInput = false
         setEmptyFields("")
-        setSuccessMessage(false)
+        setSuccessMessage("")
 
         const emailRegex = /\S+@\S+\.\S+/;
         let emailResult = emailRegex.test(email!)
@@ -38,15 +39,11 @@ export default function AddStudent() {
             setEmptyFields((prevState) => (prevState + " email"))
         }
 
-        if (firstName == "") {
+        if (password == "") {
             invalidInput = true
-            setEmptyFields((prevState) => (prevState + " firstName"))
+            setEmptyFields((prevState) => (prevState + " password"))
         }
 
-        if (lastName == "") {
-            invalidInput = true
-            setEmptyFields((prevState) => (prevState + " lastName"))
-        }
 
         // Check Invalid
         if (invalidInput) {
@@ -56,30 +53,21 @@ export default function AddStudent() {
         // Set Loading
         setLoading(true)
         
-        fetchAddStudent(firstName!, lastName!, email!)
+        fetchRegister(email!, password!)
         .finally(() => {
             setLoading(false)
         })
     }
 
-    // Create Testing Data
-    async function runTestingData() {
-        for (let i = 0 ; i < 1; i++) {
-            let email = (Math.random() * 10000).toString() + "@gmail.com"
-            fetchAddStudent("Bob", "Smith", email!)
-        }
-    }
-
-    // Add Student
-    async function fetchAddStudent(first : string, last : string, email: string) {
+    // Register
+    async function fetchRegister(email : string, password : string) {
         try {
             // Fetch
             let body = {
-                firstName: first,
-                lastName: last,
                 email: email,
+                password: password
             }
-            const response = await fetch("http://localhost:8080/students/new", {
+            const response = await fetch("http://localhost:8080/auth/addNewUser", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -89,10 +77,10 @@ export default function AddStudent() {
             const data = await response.json()
 
             // Set Success Message
-            setSuccessMessage(false)
+            setSuccessMessage("")
             setErrorMessage("")
             if (response.ok) {
-                setSuccessMessage(true)
+                setSuccessMessage("Success!")
             } else if (data.message == "email-in-use") {
                 setErrorMessage("This Email is already in use.")
             } else {
@@ -101,29 +89,31 @@ export default function AddStudent() {
         } catch {}
     }
 
+    function goToLogin(e : React.MouseEvent) {
+        e.preventDefault()
+
+        navigate("/login")
+    }
+
     return (
         <Layout>
-            <div className="AddStudentPage">
-                <form className="AddStudentForm">
-                    <label className="StudentFormHeader">Add New User</label>
-                    <label className="AddStudentFormLabel">First Name</label>
-                    <input
-                        className={"Input " + (emptyFields.includes("firstName") ? "InputError" : "")}
-                        ref={firstNameRef}
-                    />
-
-                    <label className="AddStudentFormLabel">Last Name</label>
-                    <input
-                        className={"Input " + (emptyFields.includes("lastName") ? "InputError" : "")}
-                        ref={lastNameRef}
-                    />
-
-                    <label className="AddStudentFormLabel">Email</label>
+            <form className="BodyForm">
+                <div className="BodyFormTop">
+                    <label className="FormHeader">Register</label>
+                    <label className="FormLabel">Email</label>
                     <input
                         className={"Input " + (emptyFields.includes("email") ? "InputError" : "")}
                         ref={emailRef}
                     />
 
+                    <label className="FormLabel">Password</label>
+                    <input
+                        className={"Input " + (emptyFields.includes("password") ? "InputError" : "")}
+                        type="password"
+                        ref={passwordRef}
+                    />
+                </div>
+                <div className="BodyFormBottom">
                     <button 
                         className="ButtonRounded ButtonBlue ButtonBold ButtonTextLarge" 
                         onClick={runSubmit}
@@ -132,20 +122,20 @@ export default function AddStudent() {
                     </button>
 
                     <button 
-                        className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge" 
-                        onClick={runTestingData}
+                        className="RegisterText" 
+                        onClick={goToLogin}
                         disabled={loading}>
-                        Create Testing Data
+                        Have an Account?
                     </button>
 
-                    {successMessage &&
-                        <div className="AddSuccessMessage">
-                            Success!
+                    {successMessage != "" &&
+                        <div className="FormSuccessMessage">
+                            {successMessage}
                         </div>
                     }
 
                     {errorMessage != "" &&
-                        <div className="AddErrorMessage">
+                        <div className="FormErrorMessage">
                             {errorMessage}
                         </div>
                     }
@@ -153,8 +143,8 @@ export default function AddStudent() {
                     {loading &&
                         <LoadingFrameFullScreen loading={loading}/>
                     }
-                </form>
-            </div>
+                </div>
+            </form>
         </Layout>
     )
 }

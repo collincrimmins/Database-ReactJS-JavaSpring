@@ -10,9 +10,9 @@ import EditIcon from "../../images/EditIcon.png"
 import DeleteIconWhite from "../../images/DeleteIconWhite.png"
 import SearchIcon from "../../images/SearchIcon.png"
 
-import Layout from './Layout.js';
+import Layout from './Layout.tsx'
 
-import { LoadingFrameFullScreen } from "../../library/Library.js"
+import { LoadingFrameFullScreen } from "../../utils/Library.js"
 
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
@@ -49,7 +49,7 @@ export default function Database() {
             if (pageResult.pageNumber > 0) {
                 // Get Params & Push New Params
                 let newSearchParams = getSearchParams()
-                newSearchParams["pageNumber"] = String(pageResult.pageNumber - 1)
+                newSearchParams["pageNumber"] = String(pageResult.totalPages - 1)
                 setSearchParams(newSearchParams)
             }
         }

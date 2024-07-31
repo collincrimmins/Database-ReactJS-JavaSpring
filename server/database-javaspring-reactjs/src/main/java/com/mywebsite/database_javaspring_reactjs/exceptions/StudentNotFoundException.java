@@ -10,7 +10,7 @@ public class StudentNotFoundException extends RuntimeException {
         return httpStatus;
     }
 
-    public StudentNotFoundException(String message) {
-        super(message);
+    public StudentNotFoundException() {
+        super("not-found");
     }
 }

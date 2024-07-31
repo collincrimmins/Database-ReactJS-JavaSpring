@@ -7,9 +7,8 @@ import "./css/Navbar.css"
 import reactLogo from './images/react.svg'
 
 export default function Navbar() {
-    //const location = useLocation();
-   // const { hash, pathname, search } = location;
-
+    const location = useLocation();
+    
     // Button that will be Underlined when Page Active
     type ViewPageButtonProps = {
         dest : string,
@@ -18,9 +17,17 @@ export default function Navbar() {
     function ViewPageButton({dest, children} : ViewPageButtonProps) {
         // Check Page Active
         let pageActive = false
-        // if (pathname.includes(dest)) { // if (dest === pathname) {
-        //     pageActive = true
-        // }
+        if (dest == "/login") {
+            if (location.pathname.includes("login") || location.pathname.includes("register")) {
+                pageActive = true
+            }
+        }
+        if (dest == "/students") {
+            if (location.pathname.includes("students")) {
+                pageActive = true
+            }
+        }
+        
         // Mark Link as Active or not Active
         return (
             <NavLink to={dest} className={`NavbarItem ${pageActive ? "NavbarItemActive" : ""}`}> {children} </NavLink>
@@ -36,7 +43,8 @@ export default function Navbar() {
                 </NavLink>
                 <ul>
                     <ViewPageButton dest="/students">Students</ViewPageButton>
-                    <ViewPageButton dest="/about">About</ViewPageButton>
+                    {/* <ViewPageButton dest="/about">About</ViewPageButton> */}
+                    <ViewPageButton dest="/login">Login</ViewPageButton>
                 </ul>
             </nav>
         </>
