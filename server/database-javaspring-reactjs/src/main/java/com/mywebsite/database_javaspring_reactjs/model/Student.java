@@ -23,15 +23,15 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
     
-    @NotEmpty(message = "invalid")
+    @NotBlank
     private String firstName;
 
-    @NotEmpty(message = "invalid")
+    @NotBlank
     private String lastName;
 
     @NaturalId(mutable = true)
     @Email(message = "invalid")
-    @NotEmpty(message = "invalid")
+    @NotBlank
     private String email;
 
     @CreationTimestamp

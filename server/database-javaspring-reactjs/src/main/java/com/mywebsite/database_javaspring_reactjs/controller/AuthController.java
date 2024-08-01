@@ -11,14 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
-import com.mywebsite.database_javaspring_reactjs.dto.AuthResponseDTO;
-import com.mywebsite.database_javaspring_reactjs.model.AuthRequest;
+import com.mywebsite.database_javaspring_reactjs.exceptions.AuthFailedException;
 import com.mywebsite.database_javaspring_reactjs.model.User;
+import com.mywebsite.database_javaspring_reactjs.model.auth.AuthRequest;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
-import com.mywebsite.database_javaspring_reactjs.service.JwtService;
-import com.mywebsite.database_javaspring_reactjs.service.UserService;
+import com.mywebsite.database_javaspring_reactjs.responses.auth.AuthTokenResponse;
+import com.mywebsite.database_javaspring_reactjs.service.auth.JwtService;
+import com.mywebsite.database_javaspring_reactjs.service.auth.UserService;
 
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -38,19 +39,25 @@ public class AuthController {
         return ResponseEntity.ok(new JsonResponse("created-user"));
     }
 
-    @PostMapping("/generateToken")
-    public ResponseEntity<AuthResponseDTO> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    @PostMapping("/login")
+    public ResponseEntity<AuthTokenResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         // Check Email & Password
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    authRequest.getEmail(), 
+                    authRequest.getPassword()));
+        } catch(Exception e) {
+            throw new AuthFailedException();
+        }
 
         // Return Token
         if (authentication.isAuthenticated()) {
             String jwtToken = jwtService.generateToken(authRequest.getEmail());
-            return ResponseEntity.ok(new AuthResponseDTO(jwtToken));
-        } else {
-            throw new UsernameNotFoundException("invalid user request !");
+            return ResponseEntity.ok(new AuthTokenResponse(jwtToken));
         }
+        return null;
     }
 
     @GetMapping("/user/userProfile")

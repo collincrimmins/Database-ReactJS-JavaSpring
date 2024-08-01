@@ -13,23 +13,21 @@ import org.springframework.stereotype.Service;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.Student;
-import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.modelDTO.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.repository.StudentRepository;
 import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class StudentService implements IStudentService {
-    private final StudentRepository database;
+public class StudentService {
+    @Autowired
+    private StudentRepository database;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    // Get All Students using Query & Pagination
-    @Override
+    // Get List<> using Pagination & Query
     public PageResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
         // Query & Pagination
         int PAGE_SIZE = 10;
@@ -59,7 +57,6 @@ public class StudentService implements IStudentService {
     }
 
     // Get Student by ID
-    @Override
     public StudentDTO getStudentById(Long id) {
         Student student = database.findById(id)
             .orElseThrow(() -> new StudentNotFoundException());
@@ -70,7 +67,6 @@ public class StudentService implements IStudentService {
     }
 
     // Create Student
-    @Override
     public void createStudent(@Valid StudentDTO studentDTO) {
         // Check if Email Exists
         if (checkStudentExistsByEmail(studentDTO.getEmail())) {
@@ -83,7 +79,6 @@ public class StudentService implements IStudentService {
     }
 
     // Update Student
-    @Override
     public void updateStudent(@Valid StudentDTO studentDTO, Long id) {
         Student student = database.findById(id)
             .orElseThrow(() -> new StudentNotFoundException());
@@ -105,7 +100,6 @@ public class StudentService implements IStudentService {
     }
 
     // Delete Student by ID
-    @Override
     public void deleteStudent(Long id) {
         if (!database.existsById(id)) {
             throw new StudentNotFoundException();

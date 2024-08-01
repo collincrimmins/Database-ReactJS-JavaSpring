@@ -8,6 +8,8 @@ import Layout from './Layout.tsx'
 
 import { LoadingFrameFullScreen} from "../../utils/Library.js"
 
+import { useAuthContext } from '../../contexts/useAuthContext.tsx';
+
 export default function Register() {
     const [successMessage, setSuccessMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
@@ -18,7 +20,17 @@ export default function Register() {
     const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
 
+    const {user, setUser} = useAuthContext()
+
     const navigate = useNavigate()
+
+    // Redirect if User Valid
+    useEffect(() => {
+        if (user != null) {
+            navigate("/")
+            return
+        }
+    }, [user])
 
     // Submit Button
     async function runSubmit(e : React.MouseEvent) {

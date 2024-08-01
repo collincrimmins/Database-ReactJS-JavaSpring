@@ -12,16 +12,19 @@ import SearchIcon from "../../images/SearchIcon.png"
 
 import Layout from './Layout.tsx'
 
-import { LoadingFrameFullScreen } from "../../utils/Library.js"
-
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
+
+import { LoadingFrameFullScreen } from "../../utils/Library.js"
+
+import { useAuthContext } from '../../contexts/useAuthContext.tsx';
 
 export default function Database() {
     const [students, setStudents] = useState<Student[]>([])
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const searchRef = useRef<HTMLInputElement>(null)
+    const {user, userAuthToken} = useAuthContext()
     // Search & Pagination
     const [searchParams, setSearchParams] = useSearchParams()
     const [pageResult, setPageResult] = useState({
@@ -41,7 +44,7 @@ export default function Database() {
     // Load Students at Start & Update Students on Params Update
     useEffect(() => {
        fetchAllStudents()
-    }, [searchParams])
+    }, [searchParams, user])
 
     // Set PageNumber if pageNumber > totalPages (such as when Deleting)
     useEffect(() => {
@@ -63,7 +66,10 @@ export default function Database() {
             // Fetch
             const params = new URLSearchParams(getSearchParams())
             const response = await fetch(`http://localhost:8080/students?${params}`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    "Authorization": userAuthToken
+                }
             })
             const data = await response.json()
 

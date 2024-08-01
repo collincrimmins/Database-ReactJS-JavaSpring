@@ -7,6 +7,7 @@ import "../../css/Auth.css"
 import Layout from './Layout.tsx'
 
 import { LoadingFrameFullScreen} from "../../utils/Library.js"
+import { useAuthContext } from '../../contexts/useAuthContext.tsx';
 
 export default function Login() {
     const [successMessage, setSuccessMessage] = useState("")
@@ -18,7 +19,17 @@ export default function Login() {
     const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
 
+    const {user, updateUser} = useAuthContext()
+
     const navigate = useNavigate()
+
+    // Redirect if User Valid
+    useEffect(() => {
+        if (user != null) {
+            navigate("/")
+            return
+        }
+    }, [user])
 
     // Submit Button
     async function runSubmit(e : React.MouseEvent) {
@@ -59,6 +70,14 @@ export default function Login() {
         })
     }
 
+    function successLogin(data : any) {
+        // Set Token
+        updateUser(data.token)
+
+        // Navigate
+        navigate("/")
+    }
+
     // Login
     async function fetchLogin(email : string, password : string) {
         try {
@@ -67,7 +86,7 @@ export default function Login() {
                 email: email,
                 password: password,
             }
-            const response = await fetch("http://localhost:8080/auth/generateToken", {
+            const response = await fetch("http://localhost:8080/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -75,15 +94,15 @@ export default function Login() {
                 body: JSON.stringify(body)
             })
             const data = await response.json()
-            console.log(data)
 
-            // Set Success Message
+            // Set Messages
             setSuccessMessage("")
             setErrorMessage("")
             if (response.ok) {
                 setSuccessMessage("Success!")
-            } else if (data.message == "email-in-use") {
-                setErrorMessage("This Email is already in use.")
+                successLogin(data)
+            } else if (data.message == "auth-failed") {
+                setErrorMessage("Incorrect email & password combination.")
             } else {
                 setErrorMessage("There was an Error with the Server.")
             }
@@ -104,12 +123,14 @@ export default function Login() {
                     <label className="FormLabel">Email</label>
                     <input
                         className={"Input " + (emptyFields.includes("email") ? "InputError" : "")}
+                        defaultValue={"123@123.com"}
                         ref={emailRef}
                     />
 
                     <label className="FormLabel">Password</label>
                     <input
                         className={"Input " + (emptyFields.includes("password") ? "InputError" : "")}
+                        defaultValue={"123"}
                         type="password"
                         ref={passwordRef}
                     />

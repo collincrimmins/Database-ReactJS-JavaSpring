@@ -9,7 +9,7 @@ export function useTestContext() {
 type TestProviderProps = {
     children: React.ReactNode
 }
-export default function TestProvider({children} : TestProviderProps) {
+export function TestProvider({children} : TestProviderProps) {
     const contextValues = {
         testfunction
     }

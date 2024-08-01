@@ -1,11 +1,11 @@
-package com.mywebsite.database_javaspring_reactjs.service;
+package com.mywebsite.database_javaspring_reactjs.service.auth;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.exceptions.UserEmailRequestAlreadyExists;
-import com.mywebsite.database_javaspring_reactjs.model.AuthRequest;
 import com.mywebsite.database_javaspring_reactjs.model.User;
+import com.mywebsite.database_javaspring_reactjs.model.auth.AuthRequest;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
 
 import jakarta.validation.Valid;

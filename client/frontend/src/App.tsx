@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import reactLogo from './images/react.svg'
+
 import './css/App.css'
 
 import {
@@ -12,9 +13,6 @@ import {
   RouterProvider,
   createRoutesFromElements,
 } from "react-router-dom";
-
-// Layout
-import RootLayout from './layouts/RootLayout';
 
 // Pages
 import HomePage from "./pages/Home/Home"
@@ -30,28 +28,31 @@ import AddStudentPage from "./pages/StudentDatabase/AddStudent.jsx"
 import ViewStudentPage from './pages/StudentDatabase/ViewStudent.js';
 import EditStudentPage from './pages/StudentDatabase/EditStudent.js';
 
+import AppLayout from './Layout.js';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element = {<RootLayout/>}>
+    <Route path="/" element = {<AppLayout/>}>
+      {/* Home */}
       <Route index element={<HomePage/>}/>
 
-      {/* Auth */}
-      <Route path="login" element={<LoginPage/>}/>
-      <Route path="register" element={<RegisterPage/>}/>
+       {/* Auth */}
+      <Route path="/login" element={<LoginPage/>}/>
+      <Route path="/register" element={<RegisterPage/>}/>
 
       {/* Students */}
-      <Route path="students" element={<StudentDatabasePage/>}/>
-      <Route path="students/view" element={<ViewStudentPage/>}/>
-      <Route path="students/add-student" element={<AddStudentPage/>}/>
-      <Route path="students/edit" element={<EditStudentPage/>}/>
+      <Route path="/students" element={<StudentDatabasePage/>}/>
+      <Route path="/students/view" element={<ViewStudentPage/>}/>
+      <Route path="/students/add-student" element={<AddStudentPage/>}/>
+      <Route path="/students/edit" element={<EditStudentPage/>}/>
       
-      <Route path="about" element={<AboutPage/>}/>
+      <Route path="/about" element={<AboutPage/>}/>
     </Route>
   )
 );
 
 export default function App() {
   return (
-      <RouterProvider router={router}/>
+    <RouterProvider router={router}/>
   )
 }

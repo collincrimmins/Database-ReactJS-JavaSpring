@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.mywebsite.database_javaspring_reactjs.filter.JwtAuthFilter;
-import com.mywebsite.database_javaspring_reactjs.service.UserService;
+import com.mywebsite.database_javaspring_reactjs.service.auth.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -39,25 +39,30 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                     auth -> auth.requestMatchers(
-                        // Pages
-                        "/students",
-                        "/students/**",
-
-                        // Auth
-                        "/auth/addNewUser", 
-                        "/auth/generateToken"
+                        "/**"
                     ).permitAll()
                 )
-                .authorizeHttpRequests(
-                    auth -> auth.requestMatchers(
-                        "/auth/user/**"
-                    ).authenticated()
-                )
-                .authorizeHttpRequests(
-                    auth -> auth.requestMatchers(
-                        "/auth/admin/**"
-                    ).authenticated()
-                )
+                // .authorizeHttpRequests(
+                //     auth -> auth.requestMatchers(
+                //         // Pages
+                //         "/students",
+                //         "/students/**",
+
+                //         // Auth
+                //         "/auth/addNewUser", 
+                //         "/auth/login"
+                //     ).permitAll()
+                // )
+                // .authorizeHttpRequests(
+                //     auth -> auth.requestMatchers(
+                //         "/auth/user/**"
+                //     ).authenticated()
+                // )
+                // .authorizeHttpRequests(
+                //     auth -> auth.requestMatchers(
+                //         "/auth/admin/**"
+                //     ).authenticated()
+                // )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)

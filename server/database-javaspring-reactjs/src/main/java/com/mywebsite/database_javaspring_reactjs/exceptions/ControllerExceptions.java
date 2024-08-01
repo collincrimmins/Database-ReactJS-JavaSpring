@@ -48,4 +48,11 @@ public class ControllerExceptions {
     public ResponseEntity<JsonResponse> UserEmailRequestAlreadyExists(UserEmailRequestAlreadyExists e) {
         return ResponseEntity.status(e.getHttpStatus()).body(new JsonResponse(e.getMessage()));
     }
+
+    // AuthFailedException
+    @ExceptionHandler(AuthFailedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<JsonResponse> AuthFailedException(AuthFailedException e) {
+        return ResponseEntity.status(e.getHttpStatus()).body(new JsonResponse(e.getMessage()));
+    }
 }
