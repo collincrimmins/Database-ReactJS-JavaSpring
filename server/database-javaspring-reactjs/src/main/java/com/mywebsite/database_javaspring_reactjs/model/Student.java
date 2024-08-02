@@ -30,7 +30,7 @@ public class Student {
     private String lastName;
 
     @NaturalId(mutable = true)
-    @Email(message = "invalid")
+    @Email
     @NotBlank
     private String email;
 

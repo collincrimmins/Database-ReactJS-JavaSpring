@@ -10,10 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.Student;
-import com.mywebsite.database_javaspring_reactjs.modelDTO.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.repository.StudentRepository;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 

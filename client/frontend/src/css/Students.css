@@ -66,9 +66,9 @@
     height: 100%;
 }
 
-.PageNavbarButton:hover {
+/* .PageNavbarButton:hover {
     box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.288);
-}
+} */
 
 .PageNavbarButtonActive {
     border: 2px solid rgb(0, 0, 0);

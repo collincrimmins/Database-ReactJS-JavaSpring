@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mywebsite.database_javaspring_reactjs.modelDTO.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.security.JwtService;
@@ -27,9 +27,6 @@ import com.mywebsite.database_javaspring_reactjs.service.StudentService;
 public class StudentController {
     @Autowired
     private StudentService service;
-
-    @Autowired
-    private JwtService jwtservice;
 
     // Get Students
     @GetMapping("")
@@ -74,11 +71,11 @@ public class StudentController {
     }
 
     // Do something (Protected by Authorization)
-    @GetMapping("/AuthTest")
-    public void testAuthGet(
-        @RequestHeader(value="Authorization", required=true) String token
-    ) {
-        // boolean Result = jwtservice.checkToken(token);
-        // System.out.println(Result);
-    }
+    // @GetMapping("/AuthTest")
+    // public void testAuthGet(
+    //     @RequestHeader(value="Authorization", required=true) String token
+    // ) {
+    //     // boolean Result = jwtservice.checkToken(token);
+    //     // System.out.println(Result);
+    // }
 }

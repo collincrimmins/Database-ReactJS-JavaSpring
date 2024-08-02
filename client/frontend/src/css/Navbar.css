@@ -15,9 +15,9 @@
   height: 90%;
 }
 
-.AppHeaderLogo:hover {
+/* .AppHeaderLogo:hover {
   opacity: 0.8;
-}
+} */
 
 .HomeNavbarItem {
   padding-left: 10px;
@@ -150,10 +150,10 @@
   padding-bottom: 5px;
 }
 
-.DropdownMenu ul button:hover {
+/* .DropdownMenu ul button:hover {
   text-decoration: underline;
   cursor: pointer;
-}
+} */
 
 /* Navbar */
 
