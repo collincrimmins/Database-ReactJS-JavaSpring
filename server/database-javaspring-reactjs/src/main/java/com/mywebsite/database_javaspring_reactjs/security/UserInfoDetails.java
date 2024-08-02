@@ -1,4 +1,4 @@
-package com.mywebsite.database_javaspring_reactjs.service.auth;
+package com.mywebsite.database_javaspring_reactjs.security;
 
 import com.mywebsite.database_javaspring_reactjs.model.User;
 import org.springframework.security.core.GrantedAuthority;

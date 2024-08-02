@@ -22,11 +22,12 @@ export function AuthProvider({children} : AuthProviderProps) {
     const navigate = useNavigate()
     
     useEffect(() => {
-       console.log(user)
+       //console.log(user)
     }, [user])
 
     // Get Token from LocalStorage
     useEffect(() => {
+        // Get Token from Local Storage
         if (!user) {
             let AuthToken = localStorage.getItem("AuthToken")
             if (AuthToken) {
@@ -38,6 +39,39 @@ export function AuthProvider({children} : AuthProviderProps) {
             }
         }
     }, [])
+
+    useEffect(() => {
+        if (user) {
+            const token = user.token
+            fetchCheckToken(token)
+        }
+    }, [user])
+
+    // Check if Token is Valid
+    async function fetchCheckToken(token : string) {
+        try {
+            // Fetch
+            const body = {
+                token: token
+            }
+            const response = await fetch(`http://localhost:8080/auth/checkToken`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                   // "Accept": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            const data = await response.json()
+            
+            if (!response.ok) {throw new Error()}
+            
+            if (data.message == "invalid-token") {
+                // Force Logout
+                logoutUser()
+            }
+        } catch {}
+    }
 
     // Sign In
     function updateUser(AuthToken : string) {

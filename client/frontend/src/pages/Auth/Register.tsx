@@ -20,7 +20,7 @@ export default function Register() {
     const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
 
-    const {user, setUser} = useAuthContext()
+    const {user, updateUser} = useAuthContext()
 
     const navigate = useNavigate()
 
@@ -71,6 +71,14 @@ export default function Register() {
         })
     }
 
+    function successLogin(data : any) {
+        // Set Token
+        updateUser(data.token)
+
+        // Navigate
+        navigate("/")
+    }
+
     // Register
     async function fetchRegister(email : string, password : string) {
         try {
@@ -79,7 +87,7 @@ export default function Register() {
                 email: email,
                 password: password
             }
-            const response = await fetch("http://localhost:8080/auth/addNewUser", {
+            const response = await fetch("http://localhost:8080/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -93,6 +101,7 @@ export default function Register() {
             setErrorMessage("")
             if (response.ok) {
                 setSuccessMessage("Success!")
+                successLogin(data)
             } else if (data.message == "email-in-use") {
                 setErrorMessage("This Email is already in use.")
             } else {

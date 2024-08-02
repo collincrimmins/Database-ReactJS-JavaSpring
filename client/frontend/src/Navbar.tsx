@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Route, NavLink, Link, Routes, useLocation } from 'react-router-dom';
+import { Route, NavLink, Link, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import "./css/App.css"
 import "./css/Navbar.css"
@@ -8,8 +8,10 @@ import reactLogo from './images/react.svg'
 import { useAuthContext } from './contexts/useAuthContext';
 
 export default function Navbar() {
-    const location = useLocation();
     const {user, logoutUser} = useAuthContext()
+
+    const location = useLocation();
+    const navigate = useNavigate()
     
     // Button that will be Underlined when Page Active
     type ViewPageButtonProps = {
@@ -37,8 +39,18 @@ export default function Navbar() {
         )
     }
 
+    function LoginButtonClick() {
+        navigate("/login")
+    }
+
     function LogoutButtonClick() {
         logoutUser()
+    }
+
+    function LoginButton() {
+        return (
+            <div className="NavbarItem LoginButton" onClick={LoginButtonClick}>Login</div>
+        )
     }
 
     function LogoutButton() {
@@ -57,7 +69,7 @@ export default function Navbar() {
                     <ViewPageButton dest="/students">Students</ViewPageButton>
                     {/* <ViewPageButton dest="/about">About</ViewPageButton> */}
                     {!user &&
-                        <ViewPageButton dest="/login">Login</ViewPageButton>
+                        <LoginButton/>
                     }
                     {user &&
                         <LogoutButton/>

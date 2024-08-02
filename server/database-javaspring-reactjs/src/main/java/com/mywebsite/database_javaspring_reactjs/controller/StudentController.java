@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mywebsite.database_javaspring_reactjs.modelDTO.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
-import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
+import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
+import com.mywebsite.database_javaspring_reactjs.security.JwtService;
 import com.mywebsite.database_javaspring_reactjs.service.StudentService;
-import com.mywebsite.database_javaspring_reactjs.service.auth.JwtService;
 
 @CrossOrigin
 @RestController
@@ -33,12 +33,12 @@ public class StudentController {
 
     // Get Students
     @GetMapping("")
-    public ResponseEntity<PageResponse<StudentDTO>> getStudents(
+    public ResponseEntity<PaginationResponse<StudentDTO>> getStudents(
         @RequestParam(value="search", defaultValue="", required=false) String search,
         @RequestParam(value="pageNumber", defaultValue="0", required=false) int pageNumber
     ) {
         // Query
-        PageResponse<StudentDTO> listStudents = service.getAllStudents(search, pageNumber);
+        PaginationResponse<StudentDTO> listStudents = service.getAllStudents(search, pageNumber);
         
         return ResponseEntity.ok(listStudents);
     }
@@ -78,7 +78,7 @@ public class StudentController {
     public void testAuthGet(
         @RequestHeader(value="Authorization", required=true) String token
     ) {
-        boolean Result = jwtservice.checkToken(token);
-        System.out.println(Result);
+        // boolean Result = jwtservice.checkToken(token);
+        // System.out.println(Result);
     }
 }

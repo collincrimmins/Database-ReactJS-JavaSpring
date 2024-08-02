@@ -68,8 +68,9 @@ export default function Database() {
             const response = await fetch(`http://localhost:8080/students?${params}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": userAuthToken
-                }
+                    //"Content-Type:": "application/json",
+                    //"Authorization": userAuthToken
+                },
             })
             const data = await response.json()
 

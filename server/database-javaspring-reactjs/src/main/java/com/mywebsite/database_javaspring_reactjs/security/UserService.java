@@ -1,12 +1,12 @@
-package com.mywebsite.database_javaspring_reactjs.service.auth;
+package com.mywebsite.database_javaspring_reactjs.security;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.exceptions.UserEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.model.User;
-import com.mywebsite.database_javaspring_reactjs.model.auth.AuthRequest;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
+import com.mywebsite.database_javaspring_reactjs.security.dto.AuthRequestDTO;
 
 import jakarta.validation.Valid;
 
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    public String addUser(@Valid AuthRequest authRequest) {
+    public String addUser(@Valid AuthRequestDTO authRequest) {
         // Check if Email Exists
         boolean emailExists = database.findByEmail(authRequest.getEmail()).isPresent();
         if (emailExists) {

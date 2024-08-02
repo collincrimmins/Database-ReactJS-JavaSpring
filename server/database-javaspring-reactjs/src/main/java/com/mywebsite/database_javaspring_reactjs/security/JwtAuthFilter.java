@@ -1,4 +1,4 @@
-package com.mywebsite.database_javaspring_reactjs.filter;
+package com.mywebsite.database_javaspring_reactjs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -7,10 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.mywebsite.database_javaspring_reactjs.service.auth.JwtService;
-import com.mywebsite.database_javaspring_reactjs.service.auth.UserService;
-
 import org.springframework.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,6 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response, 
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        // Check if Header has Authorization Token
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
@@ -48,6 +45,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = 
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                System.out.println(authToken);
+                
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

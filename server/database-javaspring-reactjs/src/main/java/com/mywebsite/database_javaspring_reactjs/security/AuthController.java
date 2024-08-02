@@ -1,4 +1,4 @@
-package com.mywebsite.database_javaspring_reactjs.controller;
+package com.mywebsite.database_javaspring_reactjs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,11 +13,11 @@ import org.springframework.http.ResponseEntity;
 
 import com.mywebsite.database_javaspring_reactjs.exceptions.AuthFailedException;
 import com.mywebsite.database_javaspring_reactjs.model.User;
-import com.mywebsite.database_javaspring_reactjs.model.auth.AuthRequest;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
-import com.mywebsite.database_javaspring_reactjs.responses.auth.AuthTokenResponse;
-import com.mywebsite.database_javaspring_reactjs.service.auth.JwtService;
-import com.mywebsite.database_javaspring_reactjs.service.auth.UserService;
+import com.mywebsite.database_javaspring_reactjs.security.dto.AuthRequestDTO;
+import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -32,15 +32,36 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/addNewUser")
-    public ResponseEntity<JsonResponse> addNewUser(@RequestBody AuthRequest authRequest) {
-        service.addUser(authRequest);
+    // Check if Token Valid
+    @PostMapping("/checkToken")
+    public ResponseEntity<TokenDTO> checkToken(@Valid @RequestBody TokenDTO tokenRequest) {
+        // Check if Token Expired
+        String token = tokenRequest.getToken();
+        boolean isExpired = true;
+        try {
+            isExpired = jwtService.isTokenExpired(token);
+        } catch(Exception e) {}
 
-        return ResponseEntity.ok(new JsonResponse("created-user"));
+        if (isExpired) {
+            // Invalid Token
+            return ResponseEntity.ok(new TokenDTO("invalid-token", ""));
+        } else {
+            // Valid Token
+            return ResponseEntity.ok(new TokenDTO("valid-token", ""));
+        }
     }
 
+    // Register
+    @PostMapping("/register")
+    public ResponseEntity<TokenDTO> register(@RequestBody AuthRequestDTO authRequest) {
+        service.addUser(authRequest);
+
+        return login(authRequest); //ResponseEntity.ok(new JsonResponse("created-user"));
+    }
+
+    // Login
     @PostMapping("/login")
-    public ResponseEntity<AuthTokenResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<TokenDTO> login(@RequestBody AuthRequestDTO authRequest) {
         // Check Email & Password
         Authentication authentication;
         try {
@@ -55,20 +76,20 @@ public class AuthController {
         // Return Token
         if (authentication.isAuthenticated()) {
             String jwtToken = jwtService.generateToken(authRequest.getEmail());
-            return ResponseEntity.ok(new AuthTokenResponse(jwtToken));
+            return ResponseEntity.ok(new TokenDTO("", jwtToken));
         }
         return null;
     }
 
-    @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<String> userProfile() {
-        return ResponseEntity.ok("Welcome to User Profile");
-    }
+    // @GetMapping("/user/userProfile")
+    // @PreAuthorize("hasAuthority('ROLE_USER')")
+    // public ResponseEntity<String> userProfile() {
+    //     return ResponseEntity.ok("Welcome to User Profile");
+    // }
 
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<String> adminProfile() {
-        return ResponseEntity.ok("Welcome to Admin Profile");
-    }
+    // @GetMapping("/admin/adminProfile")
+    // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    // public ResponseEntity<String> adminProfile() {
+    //     return ResponseEntity.ok("Welcome to Admin Profile");
+    // }
 }

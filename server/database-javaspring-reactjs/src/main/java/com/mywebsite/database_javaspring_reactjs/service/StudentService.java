@@ -15,7 +15,7 @@ import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundExcep
 import com.mywebsite.database_javaspring_reactjs.model.Student;
 import com.mywebsite.database_javaspring_reactjs.modelDTO.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.repository.StudentRepository;
-import com.mywebsite.database_javaspring_reactjs.responses.PageResponse;
+import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 
 import jakarta.validation.Valid;
 
@@ -28,7 +28,7 @@ public class StudentService {
     private ModelMapper modelMapper;
 
     // Get List<> using Pagination & Query
-    public PageResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
+    public PaginationResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
         // Query & Pagination
         int PAGE_SIZE = 10;
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
@@ -46,7 +46,7 @@ public class StudentService {
             .collect(Collectors.toList());
 
         // Create Pagination Response Object
-        PageResponse<StudentDTO> responsePage = new PageResponse<>();
+        PaginationResponse<StudentDTO> responsePage = new PaginationResponse<>();
         responsePage.setContent(content);
         responsePage.setPageNumber(pageStudents.getNumber());
         responsePage.setPageSize(pageStudents.getSize());
