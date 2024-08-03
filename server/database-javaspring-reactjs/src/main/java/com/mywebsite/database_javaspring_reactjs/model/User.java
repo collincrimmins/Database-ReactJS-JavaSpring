@@ -1,5 +1,8 @@
 package com.mywebsite.database_javaspring_reactjs.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.*;
@@ -19,16 +22,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotEmpty
-    private String name;
-
     @NaturalId(mutable = true)
     @Email
     @NotEmpty
     private String email;
 
     @NotEmpty
+    private String password;
+
+    @NotEmpty
+    private String name;
+
+    @NotEmpty
     private String roles;
 
-    private String password;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 }

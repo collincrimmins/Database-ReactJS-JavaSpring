@@ -20,34 +20,36 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
-    private UserRepository database;
+    private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder encoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userDetail = database.findByEmail(username);
+        Optional<User> userDetail = userRepository.findByEmail(username);
 
         // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    public String addUser(@Valid AuthRequestDTO authRequest) {
+    public String createUser(@Valid AuthRequestDTO authRequest) {
         // Check if Email Exists
-        boolean emailExists = database.findByEmail(authRequest.getEmail()).isPresent();
+        boolean emailExists = userRepository.existsByEmail(authRequest.getEmail());
         if (emailExists) {
             throw new UserEmailRequestAlreadyExists();
         }
         
         // Save User & Set Password
         User user = new User();
-        user.setName("testname");
         user.setEmail(authRequest.getEmail());
-        user.setPassword(encoder.encode(authRequest.getPassword()));
+        user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
+
+        user.setName("myusername");
         user.setRoles("ROLE_USER");
-        database.save(user);
+        
+        userRepository.save(user);
 
         return "User Added Successfully";
     }

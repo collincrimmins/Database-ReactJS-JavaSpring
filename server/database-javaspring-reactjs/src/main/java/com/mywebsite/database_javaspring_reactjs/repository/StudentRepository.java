@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.mywebsite.database_javaspring_reactjs.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    // JPA Function Queries
     Optional<Student> findByEmail(String email);
+    boolean existsByEmail(String email);
 
     // Get All Students
     @Query(

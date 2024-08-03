@@ -118,7 +118,7 @@ public class StudentService {
 
     // Check Student Exists with Email
     private boolean checkStudentExistsByEmail(String email) {
-        return database.findByEmail(email).isPresent();
+        return database.existsByEmail(email);
     }
 
     // Map (Entity -> DTO)

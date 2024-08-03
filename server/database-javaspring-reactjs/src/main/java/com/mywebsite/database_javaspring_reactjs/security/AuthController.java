@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import com.mywebsite.database_javaspring_reactjs.exceptions.AuthFailedException;
+import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.User;
+import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.security.dto.AuthRequestDTO;
 import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
@@ -31,6 +33,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Check if Token Valid
     @PostMapping("/checkToken")
@@ -53,15 +58,19 @@ public class AuthController {
 
     // Register
     @PostMapping("/register")
-    public ResponseEntity<TokenDTO> register(@RequestBody AuthRequestDTO authRequest) {
-        service.addUser(authRequest);
+    public ResponseEntity<TokenDTO> register(@Valid @RequestBody AuthRequestDTO authRequest) {
+        service.createUser(authRequest);
 
         return login(authRequest); //ResponseEntity.ok(new JsonResponse("created-user"));
     }
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody AuthRequestDTO authRequest) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody AuthRequestDTO authRequest) {
+        // Get User by Email
+        User user = userRepository.findByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("user-not-found"));
+        
         // Check Email & Password
         Authentication authentication;
         try {
@@ -75,7 +84,9 @@ public class AuthController {
 
         // Return Token
         if (authentication.isAuthenticated()) {
-            String jwtToken = jwtService.generateToken(authRequest.getEmail());
+            // Generate Token using UserID
+            String jwtToken = jwtService.generateToken(user.getId().toString());
+            
             return ResponseEntity.ok(new TokenDTO("", jwtToken));
         }
         return null;

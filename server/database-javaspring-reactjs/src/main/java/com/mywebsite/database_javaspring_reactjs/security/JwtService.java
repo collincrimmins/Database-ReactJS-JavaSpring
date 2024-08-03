@@ -47,12 +47,14 @@ public class JwtService {
 
     // Verify User Token is Valid
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractEmail(token);
+        final String username = extractUserID(token);
+        System.out.println(username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     // Get Email from Token
-    public String extractEmail(String token) {
+    public String extractUserID(String token) {
+        System.out.println("extracted " + token);
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -66,12 +68,12 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String userID) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+        return createToken(claims, userID);
     }
 
-    private String createToken(Map<String, Object> claims, String email) {
+    private String createToken(Map<String, Object> claims, String userID) {
         Calendar calendar = new GregorianCalendar(/* remember about timezone! */);
         calendar.setTime(new Date(System.currentTimeMillis()));
         calendar.add(Calendar.DATE, 30);
@@ -79,7 +81,7 @@ public class JwtService {
 
         return Jwts.builder()
             .setClaims(claims)
-            .setSubject(email)
+            .setSubject(userID)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(expDate)
             .signWith(getSignKey(), SignatureAlgorithm.HS256)
