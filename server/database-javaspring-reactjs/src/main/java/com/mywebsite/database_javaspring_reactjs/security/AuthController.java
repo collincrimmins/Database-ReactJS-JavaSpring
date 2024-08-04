@@ -21,12 +21,11 @@ import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
-    private UserService service;
+    private JWTUserService jwtUserService;
 
     @Autowired
     private JwtService jwtService;
@@ -59,7 +58,7 @@ public class AuthController {
     // Register
     @PostMapping("/register")
     public ResponseEntity<TokenDTO> register(@Valid @RequestBody AuthRequestDTO authRequest) {
-        service.createUser(authRequest);
+        jwtUserService.createUser(authRequest);
 
         return login(authRequest); //ResponseEntity.ok(new JsonResponse("created-user"));
     }

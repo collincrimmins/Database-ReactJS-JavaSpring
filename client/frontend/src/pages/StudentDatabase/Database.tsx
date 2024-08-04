@@ -18,6 +18,7 @@ import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
 import { LoadingFrameFullScreen } from "../../utils/Library.js"
 
 import { useAuthContext } from '../../contexts/useAuthContext.tsx';
+import { useCookies } from 'react-cookie';
 
 export default function Database() {
     const [students, setStudents] = useState<Student[]>([])
@@ -25,6 +26,7 @@ export default function Database() {
     const navigate = useNavigate()
     const searchRef = useRef<HTMLInputElement>(null)
     const {user, userAuthToken} = useAuthContext()
+    const [cookies] = useCookies();
     // Search & Pagination
     const [searchParams, setSearchParams] = useSearchParams()
     const [pageResult, setPageResult] = useState({
@@ -106,6 +108,11 @@ export default function Database() {
         try {
             const response = await fetch(`http://localhost:8080/students/delete/${ID}`, {
                 method: "DELETE",
+                headers: {
+                    "Content-type": "application/json",
+                    "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
+                },
+                credentials: "include",
             })
             if (response.status == 200) {
                 // Refresh Students

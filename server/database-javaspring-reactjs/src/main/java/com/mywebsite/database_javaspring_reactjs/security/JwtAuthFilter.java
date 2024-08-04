@@ -21,15 +21,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserService userDetailsService;
+    private JWTUserService userDetailsService;
 
+    // Check if Header Authorization is Valid
     @Override
     protected void doFilterInternal(
         @NonNull HttpServletRequest request, 
         @NonNull HttpServletResponse response, 
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        // Check if Header has Authorization Token
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
@@ -41,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = 
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -21,7 +21,6 @@ import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.security.JwtService;
 import com.mywebsite.database_javaspring_reactjs.service.StudentService;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/students")
 public class StudentController {

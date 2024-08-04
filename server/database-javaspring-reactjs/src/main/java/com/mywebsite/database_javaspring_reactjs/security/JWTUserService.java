@@ -18,22 +18,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class JWTUserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Turn "User" entity into "UserDetail"
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userDetail = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String UserID) throws UsernameNotFoundException {
+        Optional<User> userDetail = userRepository.findByEmail(UserID);
 
         // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + UserID));
     }
 
+    // Create User
     public String createUser(@Valid AuthRequestDTO authRequest) {
         // Check if Email Exists
         boolean emailExists = userRepository.existsByEmail(authRequest.getEmail());

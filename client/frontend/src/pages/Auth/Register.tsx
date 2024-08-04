@@ -9,6 +9,7 @@ import Layout from './Layout.tsx'
 import { LoadingFrameFullScreen} from "../../utils/Library.js"
 
 import { useAuthContext } from '../../contexts/useAuthContext.tsx';
+import { useCookies } from 'react-cookie';
 
 export default function Register() {
     const [successMessage, setSuccessMessage] = useState("")
@@ -23,6 +24,7 @@ export default function Register() {
     const {user, updateUser} = useAuthContext()
 
     const navigate = useNavigate()
+    const [cookies] = useCookies();
 
     // Redirect if User Valid
     useEffect(() => {
@@ -91,7 +93,9 @@ export default function Register() {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
+                    "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
                 },
+                credentials: "include",
                 body: JSON.stringify(body)
             })
             const data = await response.json()

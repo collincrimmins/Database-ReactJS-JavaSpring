@@ -11,6 +11,8 @@ import { LoadingFrameFullScreen} from "../../utils/Library.js"
 
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
+import { useAuthContext } from '../../contexts/useAuthContext.tsx';
+import { useCookies } from 'react-cookie';
 
 export default function EditStudent() {
     const [data, setData] = useState<Student | null>(null)
@@ -20,6 +22,8 @@ export default function EditStudent() {
     const [loading, setLoading] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
+
+    const [cookies] = useCookies();
 
     const idQuery = searchParams.get("id") || ""
 
@@ -43,7 +47,7 @@ export default function EditStudent() {
         try {
             // Fetch
             const response = await fetch(`http://localhost:8080/students/student/${idQuery}`, {
-                method: "GET",
+                method: "GET"
             })
 
             if (!response.ok) {throw new Error()}
@@ -114,7 +118,9 @@ export default function EditStudent() {
                 method: "PUT",
                 headers: {
                     "Content-type": "application/json",
+                    "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
                 },
+                credentials: "include",
                 body: JSON.stringify(body)
             })
             const data = await response.json()

@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 @Service
 public class StudentService {
     @Autowired
-    private StudentRepository database;
+    private StudentRepository studentRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -34,9 +34,9 @@ public class StudentService {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         Page<Student> pageStudents = null;
         if (search.equals("")) {
-            pageStudents = database.getStudents(pageable);
+            pageStudents = studentRepository.getStudents(pageable);
         } else {
-            pageStudents = database.getStudentsByQuery(search, pageable);
+            pageStudents = studentRepository.getStudentsByQuery(search, pageable);
         }
 
         // Get Content
@@ -58,7 +58,7 @@ public class StudentService {
 
     // Get Student by ID
     public StudentDTO getStudentById(Long id) {
-        Student student = database.findById(id)
+        Student student = studentRepository.findById(id)
             .orElseThrow(() -> new StudentNotFoundException());
 
         StudentDTO studentDTO = mapToDTO(student);
@@ -69,23 +69,23 @@ public class StudentService {
     // Create Student
     public void createStudent(@Valid StudentDTO studentDTO) {
         // Check if Email Exists
-        if (checkStudentExistsByEmail(studentDTO.getEmail())) {
+        if (studentRepository.existsByEmail(studentDTO.getEmail())) {
             throw new StudentEmailRequestAlreadyExists();
         }
         
         // Create Student
         Student student = mapToEntity(studentDTO);
-        database.save(student);
+        studentRepository.save(student);
     }
 
     // Update Student
     public void updateStudent(@Valid StudentDTO studentDTO, Long id) {
-        Student student = database.findById(id)
+        Student student = studentRepository.findById(id)
             .orElseThrow(() -> new StudentNotFoundException());
 
         // Check if another Student already owns this Email
-        if (checkStudentExistsByEmail(studentDTO.getEmail())) {
-            Student studentWithRequestedEmail = database.findByEmail(studentDTO.getEmail())
+        if (studentRepository.existsByEmail(studentDTO.getEmail())) {
+            Student studentWithRequestedEmail = studentRepository.findByEmail(studentDTO.getEmail())
                 .orElseThrow(() -> new StudentNotFoundException());
             if (student.getId() != studentWithRequestedEmail.getId()) {
                 throw new StudentEmailRequestAlreadyExists();
@@ -96,15 +96,16 @@ public class StudentService {
         student.setFirstName(studentDTO.getFirstName());
         student.setLastName(studentDTO.getLastName());
         student.setEmail(studentDTO.getEmail());
-        database.save(student);
+        
+        studentRepository.save(student);
     }
 
     // Delete Student by ID
     public void deleteStudent(Long id) {
-        if (!database.existsById(id)) {
+        if (!studentRepository.existsById(id)) {
             throw new StudentNotFoundException();
         }
-        database.deleteById(id);
+        studentRepository.deleteById(id);
     }
 
 
@@ -116,10 +117,6 @@ public class StudentService {
 
 
 
-    // Check Student Exists with Email
-    private boolean checkStudentExistsByEmail(String email) {
-        return database.existsByEmail(email);
-    }
 
     // Map (Entity -> DTO)
     private StudentDTO mapToDTO(Student student) {
@@ -133,12 +130,5 @@ public class StudentService {
         Student student = modelMapper.map(studentDTO, Student.class);
 
         return student;
-
-        // Get Entity from Database
-        // if (postDto.getId() != null) {
-        //     Post oldPost = postService.getPostById(postDto.getId());
-        //     post.setRedditID(oldPost.getRedditID());
-        //     post.setSent(oldPost.isSent());
-        // }
     }
 }

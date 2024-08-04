@@ -6,6 +6,7 @@ import "../../css/Students.css"
 import Layout from './Layout.tsx'
 
 import { LoadingFrameFullScreen} from "../../utils/Library.js"
+import { useCookies } from 'react-cookie'
 
 export default function AddStudent() {
     const [successMessage, setSuccessMessage] = useState(false)
@@ -17,6 +18,8 @@ export default function AddStudent() {
     const firstNameRef = useRef<HTMLInputElement>(null)
     const lastNameRef = useRef<HTMLInputElement>(null)
     const emailRef = useRef<HTMLInputElement>(null)
+
+    const [cookies] = useCookies();
 
     // Submit Button
     async function runSubmit(e : React.MouseEvent) {
@@ -82,8 +85,10 @@ export default function AddStudent() {
             const response = await fetch("http://localhost:8080/students/new", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-type": "application/json",
+                    "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
                 },
+                credentials: "include",
                 body: JSON.stringify(body)
             })
             const data = await response.json()
