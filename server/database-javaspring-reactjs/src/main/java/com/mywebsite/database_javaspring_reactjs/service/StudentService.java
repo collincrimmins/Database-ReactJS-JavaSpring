@@ -27,7 +27,7 @@ public class StudentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Get List<> using Pagination & Query
+    // Get Students<> using Pagination & Query
     public PaginationResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
         // Query & Pagination
         int PAGE_SIZE = 10;

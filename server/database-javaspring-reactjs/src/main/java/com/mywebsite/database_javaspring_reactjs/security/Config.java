@@ -98,12 +98,6 @@ public class Config {
                 )
 
                 //.csrf(csrf -> csrf.disable())
-
-                // .csrf((csrf) -> csrf
-                //     .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-                //      //.csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-                // )
-
                 .csrf((csrf) -> csrf
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())   
                     .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())            

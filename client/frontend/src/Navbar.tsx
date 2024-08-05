@@ -66,8 +66,8 @@ export default function Navbar() {
                     <img src={reactLogo} alt="..." className="AppHeaderLogo" />
                 </NavLink>
                 <ul>
+                    <ViewPageButton dest="/user/myusername">Tweets</ViewPageButton>
                     <ViewPageButton dest="/students">Students</ViewPageButton>
-                    {/* <ViewPageButton dest="/about">About</ViewPageButton> */}
                     {!user &&
                         <LoginButton/>
                     }

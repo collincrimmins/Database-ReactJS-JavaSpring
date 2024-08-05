@@ -38,19 +38,25 @@ public class JWTUserService implements UserDetailsService {
     // Create User
     public String createUser(@Valid AuthRequestDTO authRequest) {
         // Check if Email Exists
-        boolean emailExists = userRepository.existsByEmail(authRequest.getEmail());
-        if (emailExists) {
-            throw new UserEmailRequestAlreadyExists();
-        }
+        // boolean emailExists = userRepository.existsByEmail(authRequest.getEmail());
+        // if (emailExists) {
+        //     throw new UserEmailRequestAlreadyExists();
+        // }
+        
+        // Check if Username Exists
+        // boolean usernameExists = userRepository.existsByUsername(authRequest.getUsername());
+        // if (usernameExists) {
+        //     throw new UserUsernameRequestAlreadyExists();
+        // }
         
         // Save User & Set Password
         User user = new User();
         user.setEmail(authRequest.getEmail());
         user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 
-        user.setName("myusername");
+        user.setUsername("myusername");
         user.setRoles("ROLE_USER");
-        
+
         userRepository.save(user);
 
         return "User Added Successfully";

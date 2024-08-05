@@ -19,7 +19,6 @@ type AuthProviderProps = {
 export function AuthProvider({children} : AuthProviderProps) {
     const [user, setUser] = useState<UserType | null>(null)
     const [userAuthToken, setUserAuthToken] = useState<string | null>(null)
-    //const [csfrToken, setCsfrToken] = useState<string | null>(null)
 
     const navigate = useNavigate()
     const [cookies] = useCookies();
@@ -27,10 +26,6 @@ export function AuthProvider({children} : AuthProviderProps) {
     useEffect(() => {
        //console.log(user)
     }, [user])
-
-    // useEffect(() => {
-    //     //console.log(csfrToken)
-    // }, [csfrToken])
 
     // Get Token from LocalStorage
     useEffect(() => {
@@ -46,11 +41,6 @@ export function AuthProvider({children} : AuthProviderProps) {
         }
     }, [])
 
-    // Get CSFR Token for this Session
-    // useEffect(() => {
-    //     fetchCSFRToken()
-    // }, [])
-
     // Updates on User
     useEffect(() => {
         // Check if User Token is Valid
@@ -58,28 +48,7 @@ export function AuthProvider({children} : AuthProviderProps) {
             const token = user.token
             fetchCheckToken(token)
         }
-        // Refresh CSFR Token after Login/Logout
-        //fetchCSFRToken()
     }, [user])
-
-    // Get CSFR Token for this Session
-    // async function fetchCSFRToken() {
-    //     try {
-    //         // Fetch
-    //         const response = await fetch(`http://localhost:8080/csrf`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             }
-    //         })
-    //         const data = await response.json()
-            
-    //         if (!response.ok) {throw new Error()}
-            
-    //         // Set CSFR Token
-    //         setCsfrToken(data.token)
-    //     } catch {}
-    // }
 
     // Check if Token is Valid
     async function fetchCheckToken(token : string) {
@@ -137,9 +106,6 @@ export function AuthProvider({children} : AuthProviderProps) {
         updateUser,
         logoutUser,
         userAuthToken,
-
-        // csfr
-        //csfrToken
     }
 
     return (

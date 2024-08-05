@@ -10,7 +10,7 @@ import EmptyIcon from "../../images/EmptyIcon.png"
 
 export default function Layout({children} : {children : React.ReactNode}) {
     const navigate = useNavigate()
-    const { pathname, search, hash } = useLocation() // /products | ?id=15 | #pricing
+    const { pathname, search, hash } = useLocation()
 
     // Set Page on Navbar Button Click
     type ThisPageProps = {

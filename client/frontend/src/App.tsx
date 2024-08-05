@@ -29,6 +29,7 @@ import ViewStudentPage from './pages/StudentDatabase/ViewStudent.js';
 import EditStudentPage from './pages/StudentDatabase/EditStudent.js';
 
 import AppLayout from './Layout.js';
+import ProfilePage from './pages/Tweets/Profile.js';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +47,9 @@ const router = createBrowserRouter(
       <Route path="/students/add-student" element={<AddStudentPage/>}/>
       <Route path="/students/edit" element={<EditStudentPage/>}/>
       
+      {/* Tweets */}
+      <Route path="/user/:id" element={<ProfilePage/>}/>
+
       <Route path="/about" element={<AboutPage/>}/>
     </Route>
   )

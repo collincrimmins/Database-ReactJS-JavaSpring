@@ -286,8 +286,7 @@ export default function Database() {
                 {/* Content */}
                 <div>
                     <StudentRowHeader/>
-                    {students
-                    .map((student, index) => {
+                    {students.map((student, index) => {
                         return <StudentRowDisplay
                             key={student.id} 
                             data={student}
