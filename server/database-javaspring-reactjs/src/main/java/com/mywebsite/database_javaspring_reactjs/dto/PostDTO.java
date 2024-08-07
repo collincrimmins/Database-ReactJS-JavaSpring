@@ -7,6 +7,14 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.mywebsite.database_javaspring_reactjs.model.Post;
 import com.mywebsite.database_javaspring_reactjs.model.User;
 
 import jakarta.persistence.*;
@@ -23,10 +31,21 @@ import lombok.NoArgsConstructor;
 public class PostDTO {
     private Long id;
 
+    @JsonBackReference
+    @JsonIgnore
     private User user;
 
-    @NotEmpty
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long userID;
+
+    @NotBlank
     private String text;
 
     private LocalDateTime createdDate;
+
+    // @JsonManagedReference
+    // private List<Post> comments;
+
+    // @JsonBackReference
+    // private Post parentPost;
 }

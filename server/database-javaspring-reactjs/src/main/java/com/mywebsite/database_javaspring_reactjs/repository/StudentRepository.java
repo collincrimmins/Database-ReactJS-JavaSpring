@@ -13,14 +13,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByEmail(String email);
     boolean existsByEmail(String email);
 
-    // Get All Students
+    // Get All List<Student>
     @Query(
         value = "SELECT * FROM student",
         countQuery = "SELECT count(1) FROM student",
         nativeQuery = true)
     Page<Student> getStudents(Pageable pageable);
 
-    // Get All Students using Search Query
+    // Get Page<Student> using Search Query
     @Query(
         value = """
             SELECT * 

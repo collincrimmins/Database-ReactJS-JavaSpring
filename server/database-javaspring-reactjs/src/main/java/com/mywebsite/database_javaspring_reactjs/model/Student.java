@@ -8,14 +8,12 @@ import org.hibernate.annotations.NaturalId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "student")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {

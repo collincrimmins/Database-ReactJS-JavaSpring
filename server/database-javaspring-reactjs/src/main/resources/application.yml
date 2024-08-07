@@ -16,6 +16,10 @@ spring:
     generate-ddl: true
     hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
-      ddl.auto: create # update
+      # ddl.auto: "update" 
+      # will add new columns & constraints
+      # but will never remove columns & constaints that no longer exists
+      ddl.auto: create
       format_sql: true
       naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 1 # 20

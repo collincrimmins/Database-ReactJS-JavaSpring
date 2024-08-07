@@ -6,19 +6,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.mywebsite.database_javaspring_reactjs.dto.PostDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
+import com.mywebsite.database_javaspring_reactjs.responses.SliceResponse;
 import com.mywebsite.database_javaspring_reactjs.service.PostService;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("create")
-    public ResponseEntity<JsonResponse> createPost(PostDTO postDTO) {
-        postService.createPost(postDTO);
+    // Get Page<Post>
+    @GetMapping("/profilefeed/{username}")
+    public ResponseEntity<SliceResponse<PostDTO>> getPosts(
+        @PathVariable(value="username", required=true) String username,
+        @RequestParam(value="pageNumber", defaultValue="0", required=false) int pageNumber
+    ) {
+        SliceResponse<PostDTO> content = postService.getPostsByUsername(username, pageNumber);
+        
+        return ResponseEntity.ok(content);
+    }
+
+    // Create Post
+    @PostMapping("/create")
+    public ResponseEntity<JsonResponse> createPost(
+        @RequestBody PostDTO postDTO
+    ) {
+        // Authorization: Get UserID
+        
+        long userId = 1;
+        postService.createPost(userId, postDTO);
 
         return ResponseEntity.ok(new JsonResponse("created-post"));
     }

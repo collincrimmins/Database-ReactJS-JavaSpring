@@ -66,6 +66,10 @@
   height: 80%;
 }
 
+.LogoutButton {
+  color: rgb(255, 0, 0);
+}
+
 /* Account Frame */
 
 .AccountFrame {

@@ -55,7 +55,7 @@ export default function Navbar() {
 
     function LogoutButton() {
         return (
-            <div className="NavbarItem" onClick={LogoutButtonClick}>Logout</div>
+            <div className="NavbarItem LogoutButton" onClick={LogoutButtonClick}>Logout</div>
         )
     }
 
@@ -66,7 +66,7 @@ export default function Navbar() {
                     <img src={reactLogo} alt="..." className="AppHeaderLogo" />
                 </NavLink>
                 <ul>
-                    <ViewPageButton dest="/user/myusername">Tweets</ViewPageButton>
+                    <ViewPageButton dest="/profile/myusername">Tweets</ViewPageButton>
                     <ViewPageButton dest="/students">Students</ViewPageButton>
                     {!user &&
                         <LoginButton/>

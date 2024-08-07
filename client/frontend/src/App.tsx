@@ -48,7 +48,7 @@ const router = createBrowserRouter(
       <Route path="/students/edit" element={<EditStudentPage/>}/>
       
       {/* Tweets */}
-      <Route path="/user/:id" element={<ProfilePage/>}/>
+      <Route path="/profile/:id" element={<ProfilePage/>}/>
 
       <Route path="/about" element={<AboutPage/>}/>
     </Route>

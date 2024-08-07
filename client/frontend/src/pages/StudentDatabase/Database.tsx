@@ -82,7 +82,7 @@ export default function Database() {
             const list = data.content
             setPageResult(data)
             
-            // Check Type Schema's with Zod
+            // Check Data Schema's
             let validListOfSchema = true
             list.forEach((v : Student) => {
                 if (!validListOfSchema) {return}
@@ -91,7 +91,7 @@ export default function Database() {
                     validListOfSchema = false
                 }
             })
-            if (!validListOfSchema) {throw new Error("Data incorrect input format")}
+            if (!validListOfSchema) {console.warn("input-error"); throw new Error("input-error")}
             
             // Set Data
             setStudents(list)

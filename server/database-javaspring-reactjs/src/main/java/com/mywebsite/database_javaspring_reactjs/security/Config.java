@@ -97,12 +97,12 @@ public class Config {
                     .configurationSource(corsConfigurationSource())
                 )
 
-                //.csrf(csrf -> csrf.disable())
-                .csrf((csrf) -> csrf
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())   
-                    .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())            
-                )
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                // .csrf((csrf) -> csrf
+                //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())   
+                //     .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())            
+                // )
+                // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
 
                 .authorizeHttpRequests((request) ->
                     request.anyRequest().permitAll()

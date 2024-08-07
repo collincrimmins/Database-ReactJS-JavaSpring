@@ -1,5 +1,6 @@
 package com.mywebsite.database_javaspring_reactjs.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.dto.UserDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.UserInfoDTO;
+import com.mywebsite.database_javaspring_reactjs.exceptions.UserNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.User;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
@@ -25,7 +28,20 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    
+    // Get List<> with Public Info
+    public List<UserInfoDTO> getUserInfo(@Valid List<UserInfoDTO> list) {
+        for (UserInfoDTO userInfoDTO : list) {
+            // Get User
+            Long userID = userInfoDTO.getId();
+            User user = userRepository.findById(userID)
+             .orElseThrow(() -> new UserNotFoundException());
+            // Set Fields
+            userInfoDTO.setUsername(user.getUsername());
+            userInfoDTO.setPhoto("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png");
+        }
+        
+        return list;
+    }
 
 
     

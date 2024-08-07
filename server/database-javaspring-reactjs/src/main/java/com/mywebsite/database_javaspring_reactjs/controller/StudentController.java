@@ -17,16 +17,15 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    // Get Students
+    // Get Page<Students>
     @GetMapping("")
     public ResponseEntity<PaginationResponse<StudentDTO>> getStudents(
         @RequestParam(value="search", defaultValue="", required=false) String search,
         @RequestParam(value="pageNumber", defaultValue="0", required=false) int pageNumber
     ) {
-        // Query
-        PaginationResponse<StudentDTO> listStudents = studentService.getAllStudents(search, pageNumber);
+        PaginationResponse<StudentDTO> content = studentService.getAllStudents(search, pageNumber);
         
-        return ResponseEntity.ok(listStudents);
+        return ResponseEntity.ok(content);
     }
 
     // Get Student by ID

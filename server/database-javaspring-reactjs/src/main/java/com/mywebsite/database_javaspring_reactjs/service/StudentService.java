@@ -30,8 +30,7 @@ public class StudentService {
     // Get Students<> using Pagination & Query
     public PaginationResponse<StudentDTO> getAllStudents(String search, int pageNumber) {
         // Query & Pagination
-        int PAGE_SIZE = 10;
-        Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(pageNumber, 10);
         Page<Student> pageStudents = null;
         if (search.equals("")) {
             pageStudents = studentRepository.getStudents(pageable);
