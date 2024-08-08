@@ -102,7 +102,7 @@ public class Config {
                 //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())   
                 //     .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())            
                 // )
-                // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
 
                 .authorizeHttpRequests((request) ->
                     request.anyRequest().permitAll()

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.mywebsite.database_javaspring_reactjs.dto.PostCreateDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.PostDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
@@ -32,12 +33,9 @@ public class PostController {
     // Create Post
     @PostMapping("/create")
     public ResponseEntity<JsonResponse> createPost(
-        @RequestBody PostDTO postDTO
+        @RequestBody PostCreateDTO postCreateDTO
     ) {
-        // Authorization: Get UserID
-        
-        long userId = 1;
-        postService.createPost(userId, postDTO);
+        postService.createPost(postCreateDTO);
 
         return ResponseEntity.ok(new JsonResponse("created-post"));
     }

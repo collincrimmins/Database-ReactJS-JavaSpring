@@ -53,6 +53,39 @@
     gap: 10px;
 }
 
+/* Write Post */
+
+.WritePostBox {
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.WritePostHeader {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.TextArea {
+    /* Box */
+    width: 100%;
+    height: 75px;
+    border: 1px solid rgb(182, 182, 182);
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize:vertical;
+    /* Text */
+    font-size: 1.25rem;
+    /* Padding */
+    padding: 5px;
+}
+
 /* Post */
 
 .Post {

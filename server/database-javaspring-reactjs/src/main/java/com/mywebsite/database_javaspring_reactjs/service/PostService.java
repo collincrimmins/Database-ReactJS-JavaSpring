@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.mywebsite.database_javaspring_reactjs.dto.PostCreateDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.PostDTO;
 import com.mywebsite.database_javaspring_reactjs.exceptions.PostNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
@@ -33,6 +34,9 @@ public class PostService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -66,13 +70,14 @@ public class PostService {
     }
 
     // Create Post (Authorization)
-    public void createPost(Long userID, @Valid PostDTO postDTO) {
-        // Get User from UserID
+    public void createPost(@Valid PostCreateDTO postCreateDTO) {
+        // Get User
+        Long userID = userService.getUserIDfromToken(postCreateDTO.getAuthtoken());
         User user = userRepository.findById(userID)
             .orElseThrow(() -> new PostNotFoundException());
 
         // Set Post Fields
-        Post post = mapToEntity(postDTO);
+        Post post = modelMapper.map(postCreateDTO, Post.class);
         post.setUser(user);
 
         postRepository.save(post);

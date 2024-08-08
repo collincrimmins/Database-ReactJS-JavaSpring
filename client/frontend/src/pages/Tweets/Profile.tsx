@@ -21,14 +21,19 @@ export default function Profile() {
     const [sliceHasNext, setSliceHasNext] = useState(true)
     const [loading, setLoading] = useState(false)
     const [usersInfo, setUsersInfo] = useState<Map<Number, User>>(new Map())
-    //const {user, userAuthToken} = useAuthContext()
+    const {user, userAuthToken} = useAuthContext()
     const {id} = useParams() // "username" from URL path
     const [cookies] = useCookies();
     const navigate = useNavigate()
+    const writePostRef = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
         fetchProfileFeedBySlicePage(null)
     }, [])
+
+    useEffect(() => {
+        //console.log(user)
+    }, [user])
 
     // Posts Update: fetch all missing user info
     useEffect(() => {
@@ -110,6 +115,7 @@ export default function Profile() {
             id: number,
         }
         let body : Array<bodyList> = []
+
         let requestIDSet = new Set()
         posts.forEach((post) => {
             if (post.username == null) {
@@ -217,12 +223,67 @@ export default function Profile() {
         )
     }
 
+    // Write Post Box
+    function WritePostBox() {
+        return (
+            <div className="WritePostBox">
+                <div className="WritePostHeader">
+                    New Post
+                </div>
+                <textarea 
+                    placeholder="Type here..." 
+                    className="TextArea"
+                    ref={writePostRef}
+                />
+                <button onClick={WritePostSubmitClick} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Submit</button>
+            </div>
+        )
+    }
+
+    // Fetch Post
+    async function WritePostSubmitClick(e : React.MouseEvent) {
+        e.preventDefault()
+
+        const postText = writePostRef.current?.value
+        if (postText == "") {return}
+
+        setLoading(true)
+
+        try {
+            // Fetch
+            const body = {
+                authtoken: user.token,
+                text: postText,
+            }
+            const response = await fetch(`http://localhost:8080/posts/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+            if (!response.ok) {throw new Error()}
+
+            if (data.message == "created-post") {
+
+            }
+        } catch {}
+
+        setLoading(false)
+    }
+
     return (
         <div className = "ProfileLayout">
             <div className="ProfileHeader">
                 {id}
             </div>
             <div className="ProfileBody">
+                {/* Write Post */}
+                {user && user.username == id &&
+                    <WritePostBox/>
+                }
                 {/* Content */}
                 {posts.length > 0 && posts.map((post) => {
                     return <PostBox

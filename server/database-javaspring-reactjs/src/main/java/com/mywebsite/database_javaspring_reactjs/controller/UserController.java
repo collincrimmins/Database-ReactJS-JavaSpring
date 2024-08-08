@@ -14,6 +14,8 @@ import com.mywebsite.database_javaspring_reactjs.dto.UserInfoDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.SliceResponse;
+import com.mywebsite.database_javaspring_reactjs.security.JwtService;
+import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
 import com.mywebsite.database_javaspring_reactjs.service.PostService;
 import com.mywebsite.database_javaspring_reactjs.service.UserService;
 
@@ -33,5 +35,15 @@ public class UserController {
         List<UserInfoDTO> usersList = userService.getUserInfo(list);
         
         return ResponseEntity.ok(usersList);
+    }
+
+    // Get my UserProfile from my Auth Token
+    @PostMapping("/getmyprofile")
+    public ResponseEntity<UserInfoDTO> getMyUserProfile(
+        @RequestBody(required = true) TokenDTO tokenDTO
+    ) {
+        UserInfoDTO userInfo = userService.getMyUserProfile(tokenDTO);
+        
+        return ResponseEntity.ok(userInfo);
     }
 }

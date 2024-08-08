@@ -9,8 +9,10 @@ export function useAuthContext() {
 }
 
 interface UserType {
-    username: string,
-    token : string,
+    token: string,
+    id: string | null,
+    username: string | null,
+    photo: string | null,
 }
 
 type AuthProviderProps = {
@@ -34,19 +36,23 @@ export function AuthProvider({children} : AuthProviderProps) {
             if (AuthToken) {
                 setUserAuthToken("Bearer " + AuthToken)
                 setUser({
-                    username: "username",
-                    token: AuthToken
+                    token: AuthToken,
+                    id: null,
+                    username: null,
+                    photo: null
                 })
             }
         }
     }, [])
 
-    // Updates on User
+    // User
     useEffect(() => {
-        // Check if User Token is Valid
         if (user) {
+            // Check Token
             const token = user.token
             fetchCheckToken(token)
+            // Get my UserProfile
+            fetchUserProfile(token)
         }
     }, [user])
 
@@ -61,7 +67,6 @@ export function AuthProvider({children} : AuthProviderProps) {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
-                    "X-XSRF-TOKEN": cookies["XSRF-TOKEN"]
                 },
                 credentials: "include",
                 body: JSON.stringify(body)
@@ -77,6 +82,39 @@ export function AuthProvider({children} : AuthProviderProps) {
         } catch {}
     }
 
+    // Get my UserProfile
+    async function fetchUserProfile(token : string) {
+        // UserProfile already Exists
+        if (user) {
+            if (user.id != null) {
+                return
+            }
+        }
+
+        try {
+            // Fetch
+            const body = {
+                token: token
+            }
+            const response = await fetch(`http://localhost:8080/users/getmyprofile`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)
+            })
+            const data = await response.json()
+            if (!response.ok) {throw new Error()}
+
+            if (user) {
+                user.id = data.id
+                user.username = data.username
+                user.photo = data.photo
+                setUser({...user})
+            }
+        } catch {}
+    }
+
     // Sign In
     function updateUser(AuthToken : string) {
         // Set LocalStorage
@@ -84,8 +122,10 @@ export function AuthProvider({children} : AuthProviderProps) {
         // Set User
         setUserAuthToken("Bearer " + AuthToken)
         setUser({
-            username: "username",
-            token: AuthToken
+            token: AuthToken,
+            id: null,
+            username: null,
+            photo: null
         })
     }
 

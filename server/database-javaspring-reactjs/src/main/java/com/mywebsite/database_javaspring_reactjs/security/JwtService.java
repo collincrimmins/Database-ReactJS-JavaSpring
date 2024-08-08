@@ -45,13 +45,11 @@ public class JwtService {
     // Verify User Token is Valid
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUserID(token);
-        System.out.println(username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     // Get Email from Token
     public String extractUserID(String token) {
-        System.out.println("extracted " + token);
         return extractClaim(token, Claims::getSubject);
     }
 

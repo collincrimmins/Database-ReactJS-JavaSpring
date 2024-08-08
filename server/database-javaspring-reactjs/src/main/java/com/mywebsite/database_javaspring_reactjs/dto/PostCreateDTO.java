@@ -23,32 +23,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"user"})
-public class PostDTO {
-    private Long id;
-
-    @JsonBackReference
-    @JsonIgnore
-    private User user;
-
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userID;
-
+public class PostCreateDTO {
     @NotBlank
     private String text;
 
-    private LocalDateTime createdDate;
-
-    private String AuthToken;
-
-    // @JsonManagedReference
-    // private List<Post> comments;
-
-    // @JsonBackReference
-    // private Post parentPost;
+    @NotBlank
+    private String authtoken;
 }
