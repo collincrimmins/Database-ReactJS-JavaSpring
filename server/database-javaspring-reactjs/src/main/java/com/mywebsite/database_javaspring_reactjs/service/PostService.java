@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.dto.PostCreateDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.PostDTO;
+import com.mywebsite.database_javaspring_reactjs.dto.SliceRequestDTO;
 import com.mywebsite.database_javaspring_reactjs.exceptions.PostNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.exceptions.UserNotFoundException;
@@ -42,15 +43,26 @@ public class PostService {
     private ModelMapper modelMapper;
 
     // Get Posts<> by Username using Pagination
-    public SliceResponse<PostDTO> getPostsByUsername(String username, int pageNumber) {
+    public SliceResponse<PostDTO> getPostsByUsername(String username, @Valid SliceRequestDTO sliceRequestDTO) {
         // Get User ID
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UserNotFoundException());
         Long userID = user.getId();
-
-        // Slice Pagination sorted by createdDate
-        Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("createdDate").descending());
-        Slice<Post> slicePosts = postRepository.getAllPostsByUserID(userID, pageable);
+        
+        // Get Slice
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("createdDate").descending());;
+        Slice<Post> slicePosts;
+        if (sliceRequestDTO == null) {
+            // Get Default First Slice
+            slicePosts = postRepository.getAllPostsByUserID(userID, pageable);
+        } else {
+            // Get Slice after LastReadRecordID
+            slicePosts = postRepository.getAllPostsByUserIDAfterLastRecordID(
+                userID, 
+                pageable, 
+                sliceRequestDTO.getLastReadRecordID()
+            );
+        }
 
         // Get Content
         List<Post> listPosts = slicePosts.getContent();
@@ -63,9 +75,11 @@ public class PostService {
         // Create Pagination Response Object
         SliceResponse<PostDTO> responseSlice = new SliceResponse<>();
         responseSlice.setContent(content);
-        responseSlice.setPageNumber(slicePosts.getNumber());
         responseSlice.setHasNext(slicePosts.hasNext());
-        
+        if (slicePosts.getContent().size() != 0) {
+            responseSlice.setLastReadRecordID(content.getLast().getId());
+        }
+
         return responseSlice;
     }
 

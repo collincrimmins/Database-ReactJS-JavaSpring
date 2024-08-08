@@ -127,7 +127,7 @@ export default function Login() {
                     <label className="FormLabel">Email</label>
                     <input
                         className={"Input " + (emptyFields.includes("email") ? "InputError" : "")}
-                        defaultValue={"123@123.com"}
+                        defaultValue={"user1@123.com"}
                         ref={emailRef}
                     />
 

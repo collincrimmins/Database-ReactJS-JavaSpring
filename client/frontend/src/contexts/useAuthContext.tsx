@@ -145,7 +145,6 @@ export function AuthProvider({children} : AuthProviderProps) {
         user, 
         updateUser,
         logoutUser,
-        userAuthToken,
     }
 
     return (

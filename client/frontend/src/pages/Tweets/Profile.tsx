@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react'
 
 import { useSearchParams, useNavigate, useLocation, useParams } from 'react-router-dom';
 
@@ -15,57 +15,73 @@ import { User, UserSchema } from './Schema/UserSchema.tsx';
 import { LoadingFrameFullScreen } from '../../utils/Library.tsx';
 import { formatDistanceToNow } from 'date-fns';
 
+interface SliceInfo {
+    hasNext: boolean,
+    lastReadRecordID: number,
+}
+
 export default function Profile() {
     const [posts, setPosts] = useState<Post[]>([])
-    const [slicePageNumber, setSlicePageNumber] = useState(0)
-    const [sliceHasNext, setSliceHasNext] = useState(true)
+    const [sliceInfo, setSliceInfo] = useState<SliceInfo | null>(null)
     const [loading, setLoading] = useState(false)
-    const [usersInfo, setUsersInfo] = useState<Map<Number, User>>(new Map())
-    const {user, userAuthToken} = useAuthContext()
+    const [userProfiles, setUserProfiles] = useState<Map<Number, User>>(new Map())
+    const {user} = useAuthContext()
     const {id} = useParams() // "username" from URL path
     const [cookies] = useCookies();
     const navigate = useNavigate()
-    const writePostRef = useRef<HTMLTextAreaElement>(null)
+    const [writePostText, setWritePostText] = useState("")
 
+    // BUG:
+    // Navigate from user2 to user1, and the Page won't reset & refresh correctly.
+
+    // Get Feed on Begin
     useEffect(() => {
-        fetchProfileFeedBySlicePage(null)
+        fetchNextProfileFeed()
     }, [])
 
+    // [Posts] Check if new UserProfiles's need to be Fetched
     useEffect(() => {
-        //console.log(user)
-    }, [user])
-
-    // Posts Update: fetch all missing user info
-    useEffect(() => {
-        // Check if new UserInfo's need to be Loaded
         fetchListUserInfo()
     }, [posts])
 
-    // Users Update: update posts with user info
+    // [UserProfiles] Apply new UserProfile's to Existing Posts
     useEffect(() => {
-        // Apply new UserInfo to all Posts
         applyUserInfoListToPosts()
-    }, [usersInfo])
+    }, [userProfiles])
+
+    // [id] Username has changed - reset page
+    useEffect(() => {
+        // Reset State
+        setSliceInfo(null)
+        setUserProfiles(new Map())
+        setPosts([])
+    }, [id])
 
     // Get Profile Feed
-    async function fetchProfileFeedBySlicePage(page : number | null) {
+    async function fetchNextProfileFeed() {
+        // Username request is null
+        if (id == "") {return}
+        // Next Slice does not Exist
+        if (sliceInfo) {
+            if (!sliceInfo.hasNext) {
+                return
+            }
+        }
+
         setLoading(true)
 
         try {
-            // Get Username
-            if (id == "") {return}
             const username = id
-            // Get Page Number (from ClickToLoadMore or Page Startup)
-            const nextRequestPage = page || slicePageNumber
-            // Fetch
-            const params = new URLSearchParams({
-                "pageNumber": nextRequestPage.toString()
-            })
-            const response = await fetch(`http://localhost:8080/posts/profilefeed/${username}?${params}`, {
-                method: "GET",
+            let body = null;
+            if (sliceInfo) {
+                body = {lastReadRecordID: sliceInfo.lastReadRecordID}
+            }
+            const response = await fetch(`http://localhost:8080/posts/profilefeed/${username}`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(body)
             })
             const data = await response.json()
 
@@ -73,15 +89,15 @@ export default function Profile() {
 
             // Get Content & Set Pagination Info
             const list = data.content
-            const listPageNumber = data.pageNumber
-            const listHasNext = data.hasNext
-            setSlicePageNumber(listPageNumber)
-            setSliceHasNext(listHasNext)
+            setSliceInfo({
+                hasNext: data.hasNext,
+                lastReadRecordID: data.lastReadRecordID,
+            })
 
             // Add Local Fields: "username" and "userPhoto"
             list.map((v : Post) => {
-                v["username"] = usersInfo.get(v["userID"])?.username || null
-                v["userPhoto"] = usersInfo.get(v["userID"])?.photo || null
+                v["username"] = userProfiles.get(v["userID"])?.username || null
+                v["userPhoto"] = userProfiles.get(v["userID"])?.photo || null
                 return v
             })
             
@@ -110,7 +126,6 @@ export default function Profile() {
         setLoading(true)
 
         // Check if any new UserID needs to be added to the Request
-        // Get Body
         type bodyList = {
             id: number,
         }
@@ -120,7 +135,7 @@ export default function Profile() {
         posts.forEach((post) => {
             if (post.username == null) {
                 if (!requestIDSet.has(post.userID)) {
-                    if (!usersInfo.has(post.userID)) {
+                    if (!userProfiles.has(post.userID)) {
                         body.push({id: post.userID})
                         requestIDSet.add(post.userID)
                     }
@@ -153,7 +168,7 @@ export default function Profile() {
             if (!validListOfSchema) {console.warn("input-error"); throw new Error("input-error")}
             
             // Set Data
-            setUsersInfo((prevMap : Map<Number, User>) => {
+            setUserProfiles((prevMap : Map<Number, User>) => {
                 data.forEach((newUser : User) => {
                     if (!prevMap.has(newUser.id)) {
                         prevMap.set(newUser.id, newUser)
@@ -171,9 +186,9 @@ export default function Profile() {
         setPosts((prevPosts : Post[]) => {
             prevPosts.forEach((v : Post) => {
                 if (v.username == null) {
-                    if (usersInfo.has(v.userID)) {
-                        v.username = usersInfo.get(v.userID)!.username
-                        v.userPhoto = usersInfo.get(v.userID)!.photo
+                    if (userProfiles.has(v.userID)) {
+                        v.username = userProfiles.get(v.userID)!.username
+                        v.userPhoto = userProfiles.get(v.userID)!.photo
                     }
                 }
             })
@@ -211,7 +226,7 @@ export default function Profile() {
     function LoadMorePostsClick(e : React.MouseEvent) {
         e.preventDefault()
 
-        fetchProfileFeedBySlicePage(slicePageNumber + 1)
+        fetchNextProfileFeed()
     }
 
     // Load More Posts Button
@@ -223,28 +238,11 @@ export default function Profile() {
         )
     }
 
-    // Write Post Box
-    function WritePostBox() {
-        return (
-            <div className="WritePostBox">
-                <div className="WritePostHeader">
-                    New Post
-                </div>
-                <textarea 
-                    placeholder="Type here..." 
-                    className="TextArea"
-                    ref={writePostRef}
-                />
-                <button onClick={WritePostSubmitClick} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Submit</button>
-            </div>
-        )
-    }
-
     // Fetch Post
     async function WritePostSubmitClick(e : React.MouseEvent) {
         e.preventDefault()
 
-        const postText = writePostRef.current?.value
+        const postText = writePostText
         if (postText == "") {return}
 
         setLoading(true)
@@ -271,6 +269,7 @@ export default function Profile() {
             }
         } catch {}
 
+        setWritePostText("")
         setLoading(false)
     }
 
@@ -282,7 +281,11 @@ export default function Profile() {
             <div className="ProfileBody">
                 {/* Write Post */}
                 {user && user.username == id &&
-                    <WritePostBox/>
+                    <WritePostBox
+                        writePostText={writePostText}
+                        setWritePostText={setWritePostText}
+                        WritePostSubmitClick={WritePostSubmitClick}
+                    />
                 }
                 {/* Content */}
                 {posts.length > 0 && posts.map((post) => {
@@ -292,7 +295,7 @@ export default function Profile() {
                     />
                 })}
                 {/* Load More */}
-                {sliceHasNext &&
+                {sliceInfo?.hasNext &&
                     <LoadMorePostsButton/>
                 }
                 {/* Loading */}
@@ -300,6 +303,29 @@ export default function Profile() {
                     <LoadingFrameFullScreen loading={loading}/>
                 }
             </div>
+        </div>
+    )
+}
+
+// Write Post Box
+type writePostTypes = {
+    writePostText: string,
+    setWritePostText: Dispatch<SetStateAction<string>>,
+    WritePostSubmitClick: any
+}
+function WritePostBox({writePostText, setWritePostText, WritePostSubmitClick} : writePostTypes) {
+    return (
+        <div className="WritePostBox">
+            <div className="WritePostHeader">
+                New Post
+            </div>
+            <textarea 
+                placeholder="Type here..." 
+                className="TextArea"
+                onChange={(e) => setWritePostText(e.target.value)}
+                value={writePostText}
+            />
+            <button onClick={WritePostSubmitClick} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Submit</button>
         </div>
     )
 }

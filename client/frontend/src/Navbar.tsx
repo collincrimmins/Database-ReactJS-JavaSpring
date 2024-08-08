@@ -62,11 +62,18 @@ export default function Navbar() {
     return (
         <>
             <nav className="Navbar">
-                <NavLink to="/" className="HomeNavbarItem">   
-                    <img src={reactLogo} alt="..." className="AppHeaderLogo" />
-                </NavLink>
-                <ul>
-                    <ViewPageButton dest="/profile/myusername">Tweets</ViewPageButton>
+                <div className="NavbarLeft">
+                    <NavLink to="/" className="HomeNavbarItem">   
+                        <img src={reactLogo} alt="..." className="AppHeaderLogo" />
+                    </NavLink>
+                    {user && 
+                        <div className="NavbarUserheader">
+                            {user.username}
+                        </div>
+                    }
+                </div>
+                <div className="NavbarRight">
+                    <ViewPageButton dest="/profile/user1">Profile</ViewPageButton>
                     <ViewPageButton dest="/students">Students</ViewPageButton>
                     {!user &&
                         <LoginButton/>
@@ -74,7 +81,7 @@ export default function Navbar() {
                     {user &&
                         <LogoutButton/>
                     }
-                </ul>
+                </div>
             </nav>
         </>
     )

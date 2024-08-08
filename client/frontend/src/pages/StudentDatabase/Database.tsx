@@ -25,7 +25,7 @@ export default function Database() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const searchRef = useRef<HTMLInputElement>(null)
-    const {user, userAuthToken} = useAuthContext()
+    const {user} = useAuthContext()
     const [cookies] = useCookies();
     // Search & Pagination
     const [searchParams, setSearchParams] = useSearchParams()
@@ -71,7 +71,6 @@ export default function Database() {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    //"Authorization": userAuthToken
                 },
             })
             const data = await response.json()
