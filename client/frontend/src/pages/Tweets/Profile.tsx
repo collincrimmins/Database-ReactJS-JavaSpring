@@ -20,37 +20,74 @@ interface SliceInfo {
     lastReadRecordID: number,
 }
 
-export default function Profile() {
+export default function ProfileComponent() {
     const [posts, setPosts] = useState<Post[]>([])
     const [sliceInfo, setSliceInfo] = useState<SliceInfo | null>(null)
-    const [loading, setLoading] = useState(false)
     const [userProfiles, setUserProfiles] = useState<Map<Number, User>>(new Map())
+    const [writePostText, setWritePostText] = useState("")
+    const [loading, setLoading] = useState(false)
     const {user} = useAuthContext()
     const {id} = useParams() // "username" from URL path
-    const [writePostText, setWritePostText] = useState("")
 
-    // Get Feed on Start
     useEffect(() => {
+        // Get Feed
         fetchNextProfileFeed()
+        // Get UserProfile of the Profile
+        fetchProfileUserInfo()
     }, [])
 
     // [Posts] Check if new UserProfiles's need to be Fetched
     useEffect(() => {
         fetchListUserInfo()
+        applyUserProfilesToPosts()
     }, [posts])
 
     // [UserProfiles] Apply new UserProfile's to Existing Posts
     useEffect(() => {
-        applyUserInfoListToPosts()
+        applyUserProfilesToPosts()
     }, [userProfiles])
 
     // [id] Username has changed - reset page
     useEffect(() => {
+        console.log(id)
         // Reset State
-        setSliceInfo(null)
-        setUserProfiles(new Map())
-        setPosts([])
+        // setSliceInfo(null)
+        // setUserProfiles(new Map())
+        // setPosts([])
     }, [id])
+
+    // Get UserInfo for this Profile by Username
+    async function fetchProfileUserInfo() {
+        // Username request is null
+        if (id == "") {return}
+
+        try {
+            const params = new URLSearchParams({
+                username: id!
+            })
+            const response = await fetch(`http://localhost:8080/users/info?${params}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            const data = await response.json()
+            if (!response.ok) {throw new Error()}
+            
+            // Check Data Schema's
+            const validSchema = UserSchema.safeParse(data).success
+            if (!validSchema) {console.warn("input-error"); throw new Error("input-error")}
+            
+            // Set Data
+            const newUserProfile = data
+            if (!userProfiles.has(newUserProfile.id)) {
+                setUserProfiles((prevMap : Map<Number, User>) => {
+                    prevMap.set(newUserProfile.id, newUserProfile)
+                    return new Map(prevMap)
+                })
+            }
+        } catch {}
+    }
 
     // Get Profile Feed
     async function fetchNextProfileFeed() {
@@ -176,17 +213,23 @@ export default function Profile() {
     }
 
     // Apply UserInfo to all Posts
-    function applyUserInfoListToPosts() {
+    function applyUserProfilesToPosts() {
+        let updatedState = false
         setPosts((prevPosts : Post[]) => {
             prevPosts.forEach((v : Post) => {
                 if (v.username == null) {
                     if (userProfiles.has(v.userID)) {
                         v.username = userProfiles.get(v.userID)!.username
                         v.userPhoto = userProfiles.get(v.userID)!.photo
+                        updatedState = true
                     }
                 }
             })
-            return [...prevPosts]
+            if (updatedState) {
+                return [...prevPosts]
+            } else {
+                return prevPosts
+            }
         })
     }
 
@@ -266,11 +309,50 @@ export default function Profile() {
         setLoading(false)
     }
 
+    // Follow Button
+    function FollowButton() {
+        return (
+            <div className="ProfileButton">
+                follow
+            </div>
+        )
+    }
+
     // Profile Header
     function ProfileHeader() {
+        const username = id
+
+        let photo
+        let profileBackground = "https://i0.wp.com/backgroundabstract.com/wp-content/uploads/edd/2022/02/vecteezywhite-backgroundYK0221_generated-e1656067754363.jpg?resize=150150&ssl=1"
+        userProfiles.forEach((v) => {
+            if (v.username == username) {
+                photo = v.photo
+            }
+        })
+
         return (
             <div className="ProfileHeader">
-                {id}
+                <div className = "ProfileHeaderBackground">
+                    <img src = {profileBackground} className="ProfileHeaderBackgroundPhoto"/>
+                </div>
+                <div className = "ProfileHeaderMiddle">
+                    <img src = {photo} className="ProfilePhotoHeader"/>
+                    <div className="ProfileHeaderText">
+                        {id}
+                    </div>
+                    <FollowButton/>
+                </div>
+                <div className = "ProfileHeaderBottom">
+                    <div className="ProfileHeaderBio">
+                        Lorem ipsum dolor sit amet, consectetur adipisci elit, 
+                        sed eiusmod tempor incidunt ut labore et dolore magna aliqua. 
+                        Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis 
+                        suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+                    </div>
+                    <div className="ProfileHeaderSocialInfo">
+                        100 Followers | 50 Following
+                    </div>
+                </div>
             </div>
         )
     }

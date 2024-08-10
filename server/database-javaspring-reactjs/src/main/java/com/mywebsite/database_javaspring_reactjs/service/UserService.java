@@ -37,7 +37,7 @@ public class UserService {
         return userID;
     }
 
-    // Get List<> with Public Info
+    // Get List<> with UserInfo
     public List<UserInfoDTO> getUserInfo(@Valid List<UserInfoDTO> list) {
         for (UserInfoDTO userInfoDTO : list) {
             // Get User
@@ -50,6 +50,19 @@ public class UserService {
         }
         
         return list;
+    }
+
+    // Get UserInfo
+    public UserInfoDTO getUserInfoByUsername(String username) {
+        // Get User
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UserNotFoundException());
+        // Set Fields
+        UserInfoDTO userInfoDTO = modelMapper.map(user, UserInfoDTO.class);
+        userInfoDTO.setUsername(user.getUsername());
+        userInfoDTO.setPhoto(TEST_PHOTO);
+        
+        return userInfoDTO;
     }
 
     // Get my UserProfile from my Auth Token

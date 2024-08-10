@@ -63,6 +63,8 @@ public class PostService {
         // Get Content
         List<Post> listPosts = slicePosts.getContent();
 
+       // System.out.println(listPosts.getLast().toString());
+
         // Convert Post to PostDTO
         List<PostDTO> content = listPosts.stream()
             .map(post -> mapToDTO(post))
