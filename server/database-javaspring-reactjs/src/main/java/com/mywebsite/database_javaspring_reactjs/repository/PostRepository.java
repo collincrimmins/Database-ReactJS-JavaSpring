@@ -1,8 +1,5 @@
 package com.mywebsite.database_javaspring_reactjs.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,10 +25,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             FROM post 
             WHERE 
                 user_id = :userID
-                AND id < :LastReadRecordID
+                AND id < :lastReadRecordID
         """, 
         nativeQuery = true)
     Slice<Post> getAllPostsByUserIDAfterLastRecordID(
-        Long userID, Pageable pageable, Long LastReadRecordID
+        Long userID, Pageable pageable, Long lastReadRecordID
     );
 }

@@ -27,14 +27,9 @@ export default function Profile() {
     const [userProfiles, setUserProfiles] = useState<Map<Number, User>>(new Map())
     const {user} = useAuthContext()
     const {id} = useParams() // "username" from URL path
-    const [cookies] = useCookies();
-    const navigate = useNavigate()
     const [writePostText, setWritePostText] = useState("")
 
-    // BUG:
-    // Navigate from user2 to user1, and the Page won't reset & refresh correctly.
-
-    // Get Feed on Begin
+    // Get Feed on Start
     useEffect(() => {
         fetchNextProfileFeed()
     }, [])
@@ -84,7 +79,6 @@ export default function Profile() {
                 body: JSON.stringify(body)
             })
             const data = await response.json()
-
             if (!response.ok) {throw new Error()}
 
             // Get Content & Set Pagination Info
@@ -222,14 +216,14 @@ export default function Profile() {
         )
     }
 
-    // Load More Posts
+    // LoadMorePostsClick
     function LoadMorePostsClick(e : React.MouseEvent) {
         e.preventDefault()
 
         fetchNextProfileFeed()
     }
 
-    // Load More Posts Button
+    // LoadMorePostsButton
     function LoadMorePostsButton() {
         return (
             <div className="LoadMoreButton" onClick={LoadMorePostsClick}>
@@ -238,7 +232,7 @@ export default function Profile() {
         )
     }
 
-    // Fetch Post
+    // WritePostSubmitClick
     async function WritePostSubmitClick(e : React.MouseEvent) {
         e.preventDefault()
 
@@ -265,19 +259,25 @@ export default function Profile() {
             if (!response.ok) {throw new Error()}
 
             if (data.message == "created-post") {
-
+                setWritePostText("")
             }
         } catch {}
 
-        setWritePostText("")
         setLoading(false)
+    }
+
+    // Profile Header
+    function ProfileHeader() {
+        return (
+            <div className="ProfileHeader">
+                {id}
+            </div>
+        )
     }
 
     return (
         <div className = "ProfileLayout">
-            <div className="ProfileHeader">
-                {id}
-            </div>
+            <ProfileHeader/>
             <div className="ProfileBody">
                 {/* Write Post */}
                 {user && user.username == id &&
@@ -307,7 +307,7 @@ export default function Profile() {
     )
 }
 
-// Write Post Box
+// WritePostBox (Input must be outside of the render, so the input-focus will not be lost)
 type writePostTypes = {
     writePostText: string,
     setWritePostText: Dispatch<SetStateAction<string>>,

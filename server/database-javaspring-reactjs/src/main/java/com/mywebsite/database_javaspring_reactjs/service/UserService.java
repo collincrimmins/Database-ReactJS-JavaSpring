@@ -1,14 +1,9 @@
 package com.mywebsite.database_javaspring_reactjs.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,7 +12,6 @@ import com.mywebsite.database_javaspring_reactjs.dto.UserInfoDTO;
 import com.mywebsite.database_javaspring_reactjs.exceptions.UserNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.User;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
-import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.security.JwtService;
 import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
 

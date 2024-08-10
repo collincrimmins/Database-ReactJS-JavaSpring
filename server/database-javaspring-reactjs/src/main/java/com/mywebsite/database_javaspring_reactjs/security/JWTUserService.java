@@ -3,7 +3,6 @@ package com.mywebsite.database_javaspring_reactjs.security;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.mywebsite.database_javaspring_reactjs.exceptions.UserEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.model.User;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
 import com.mywebsite.database_javaspring_reactjs.security.dto.AuthRequestDTO;

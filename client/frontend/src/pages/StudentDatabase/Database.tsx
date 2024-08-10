@@ -74,7 +74,6 @@ export default function Database() {
                 },
             })
             const data = await response.json()
-
             if (!response.ok) {throw new Error()}
 
             // Get Content & Set Pagination Info

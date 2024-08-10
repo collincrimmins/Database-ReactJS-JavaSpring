@@ -49,7 +49,6 @@ export default function EditStudent() {
             const response = await fetch(`http://localhost:8080/students/student/${idQuery}`, {
                 method: "GET"
             })
-
             if (!response.ok) {throw new Error()}
 
             // Check Data with Zod

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
+import com.mywebsite.database_javaspring_reactjs.exceptions.GlobalExceptionHandler;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentEmailRequestAlreadyExists;
 import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.Student;

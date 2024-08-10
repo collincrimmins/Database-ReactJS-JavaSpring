@@ -5,25 +5,21 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.database_javaspring_reactjs.dto.PostCreateDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.PostDTO;
 import com.mywebsite.database_javaspring_reactjs.dto.SliceRequestDTO;
 import com.mywebsite.database_javaspring_reactjs.exceptions.PostNotFoundException;
-import com.mywebsite.database_javaspring_reactjs.exceptions.StudentNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.exceptions.UserNotFoundException;
 import com.mywebsite.database_javaspring_reactjs.model.Post;
 import com.mywebsite.database_javaspring_reactjs.model.User;
 import com.mywebsite.database_javaspring_reactjs.repository.PostRepository;
 import com.mywebsite.database_javaspring_reactjs.repository.UserRepository;
-import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.SliceResponse;
 
 import jakarta.validation.Valid;
@@ -79,6 +75,8 @@ public class PostService {
         if (slicePosts.getContent().size() != 0) {
             responseSlice.setLastReadRecordID(content.getLast().getId());
         }
+
+        //System.out.println(content.getLast().toString());
 
         return responseSlice;
     }

@@ -72,7 +72,6 @@ export function AuthProvider({children} : AuthProviderProps) {
                 body: JSON.stringify(body)
             })
             const data = await response.json()
-            
             if (!response.ok) {throw new Error()}
             
             if (data.message == "invalid-token") {

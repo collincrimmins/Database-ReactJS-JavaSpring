@@ -1,14 +1,12 @@
 package com.mywebsite.database_javaspring_reactjs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.mywebsite.database_javaspring_reactjs.dto.StudentDTO;
 import com.mywebsite.database_javaspring_reactjs.responses.JsonResponse;
 import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
-import com.mywebsite.database_javaspring_reactjs.security.JwtService;
 import com.mywebsite.database_javaspring_reactjs.service.StudentService;
 
 @RestController
