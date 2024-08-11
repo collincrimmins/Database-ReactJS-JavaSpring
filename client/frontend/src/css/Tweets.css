@@ -49,6 +49,10 @@
     gap: 5px;
 }
 
+.ProfileHeaderLoading {
+    height: 300px;
+}
+
 .ProfileHeaderBackground {
     width: 100%;
     height: 150px;
@@ -158,6 +162,10 @@
     gap: 10px;
 }
 
+.PostLoading {
+    height: 100px;
+}
+
 .PostPhotoBox {
     display: flex;
     flex-direction: column;
@@ -211,4 +219,9 @@
     height: 40px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.LoadMoreButtonLoading {
+    width: 100%;
+    height: 40px;
 }

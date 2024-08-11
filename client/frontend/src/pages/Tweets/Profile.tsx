@@ -12,7 +12,9 @@ import { useAuthContext } from '../../contexts/useAuthContext';
 import { Post, PostSchema } from './Schema/PostSchema.tsx';
 import { User, UserSchema } from './Schema/UserSchema.tsx';
 
-import { LoadingFrameFullScreen } from '../../utils/Library.tsx';
+import { LoadingFrameFill, LoadingFrameFullScreen, sleep } from '../../utils/Library.tsx';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import { formatDistanceToNow } from 'date-fns';
 
 interface SliceInfo {
@@ -25,7 +27,11 @@ export default function ProfileComponent() {
     const [sliceInfo, setSliceInfo] = useState<SliceInfo | null>(null)
     const [userProfiles, setUserProfiles] = useState<Map<Number, User>>(new Map())
     const [writePostText, setWritePostText] = useState("")
-    const [loading, setLoading] = useState(false)
+
+    const [loadingProfileHeader, setLoadingProfileHeader] = useState(false)
+    const [loadingPageInitial, setLoadingPageInitial] = useState(false)
+    const [loadingNextPage, setLoadingNextPage] = useState(false)
+
     const {user} = useAuthContext()
     const {id} = useParams() // "username" from URL path
 
@@ -49,7 +55,6 @@ export default function ProfileComponent() {
 
     // [id] Username has changed - reset page
     useEffect(() => {
-        console.log(id)
         // Reset State
         // setSliceInfo(null)
         // setUserProfiles(new Map())
@@ -60,6 +65,8 @@ export default function ProfileComponent() {
     async function fetchProfileUserInfo() {
         // Username request is null
         if (id == "") {return}
+
+        setLoadingProfileHeader(true)
 
         try {
             const params = new URLSearchParams({
@@ -87,6 +94,8 @@ export default function ProfileComponent() {
                 })
             }
         } catch {}
+
+        setLoadingProfileHeader(false)
     }
 
     // Get Profile Feed
@@ -100,7 +109,13 @@ export default function ProfileComponent() {
             }
         }
 
-        setLoading(true)
+        let loadingType = "initialPage"
+        if (!sliceInfo) {
+            setLoadingPageInitial(true)
+        } else {
+            loadingType = "nextPage"
+            setLoadingNextPage(true)
+        }
 
         try {
             const username = id
@@ -149,13 +164,15 @@ export default function ProfileComponent() {
             })
         } catch {}
 
-        setLoading(false)
+        if (loadingType == "initialPage") {
+            setLoadingPageInitial(false)
+        } else {
+            setLoadingNextPage(false)
+        }
     }
 
     // Get UserInfoList by UserID from Posts
     async function fetchListUserInfo() {
-        setLoading(true)
-
         // Check if any new UserID needs to be added to the Request
         type bodyList = {
             id: number,
@@ -173,7 +190,10 @@ export default function ProfileComponent() {
                 }
             }
         })
-        if (requestIDSet.size == 0) {setLoading(false); return}
+        if (requestIDSet.size == 0) {
+            //setLoading(false)
+            return
+        }
 
         try {
             // Fetch
@@ -208,8 +228,6 @@ export default function ProfileComponent() {
                 return new Map(prevMap)
             })
         } catch {}
-
-        setLoading(false)
     }
 
     // Apply UserInfo to all Posts
@@ -259,9 +277,19 @@ export default function ProfileComponent() {
         )
     }
 
+    function PostBoxLoading() {
+        return (
+            <div className="PostLoading">
+                <Skeleton className="SkeletonFill"/>
+            </div>
+        )
+    }
+
     // LoadMorePostsClick
     function LoadMorePostsClick(e : React.MouseEvent) {
         e.preventDefault()
+
+        if (loadingNextPage) {return}
 
         fetchNextProfileFeed()
     }
@@ -275,6 +303,14 @@ export default function ProfileComponent() {
         )
     }
 
+    function LoadMorePostsButtonLoading() {
+        return (
+            <div className="LoadMoreButtonLoading">
+                <LoadingFrameFill/>
+            </div>
+        )
+    }
+
     // WritePostSubmitClick
     async function WritePostSubmitClick(e : React.MouseEvent) {
         e.preventDefault()
@@ -282,7 +318,7 @@ export default function ProfileComponent() {
         const postText = writePostText
         if (postText == "") {return}
 
-        setLoading(true)
+        //setLoading(true)
 
         try {
             // Fetch
@@ -306,7 +342,7 @@ export default function ProfileComponent() {
             }
         } catch {}
 
-        setLoading(false)
+        //setLoading(false)
     }
 
     // Follow Button
@@ -357,12 +393,24 @@ export default function ProfileComponent() {
         )
     }
 
+    function ProfileHeaderLoading() {
+        return (
+            <div className="ProfileHeaderLoading">
+                <Skeleton className="SkeletonFill"/>
+            </div>
+        )
+    }
+
     return (
         <div className = "ProfileLayout">
-            <ProfileHeader/>
+            {loadingProfileHeader? 
+                <ProfileHeaderLoading/>
+                :
+                <ProfileHeader/>
+            }
             <div className="ProfileBody">
                 {/* Write Post */}
-                {user && user.username == id &&
+                {loadingProfileHeader == false && user && user.username == id &&
                     <WritePostBox
                         writePostText={writePostText}
                         setWritePostText={setWritePostText}
@@ -376,13 +424,17 @@ export default function ProfileComponent() {
                         data={post}
                     />
                 })}
+                {loadingPageInitial && 
+                    new Array(5).fill("").map((_, index) => {
+                        return <PostBoxLoading key={index} />
+                    })
+                }
                 {/* Load More */}
-                {sliceInfo?.hasNext &&
+                {!loadingNextPage && sliceInfo?.hasNext &&
                     <LoadMorePostsButton/>
                 }
-                {/* Loading */}
-                {loading &&
-                    <LoadingFrameFullScreen loading={loading}/>
+                {loadingNextPage &&
+                    <LoadMorePostsButtonLoading/>
                 }
             </div>
         </div>

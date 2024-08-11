@@ -15,7 +15,9 @@ import Layout from './Layout.tsx'
 // Schemas
 import { Student, StudentSchema } from './Schema/StudentSchema.tsx';
 
-import { LoadingFrameFullScreen } from "../../utils/Library.js"
+import { LoadingFrameFullScreen, sleep } from "../../utils/Library.js"
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import { useAuthContext } from '../../contexts/useAuthContext.tsx';
 import { useCookies } from 'react-cookie';
@@ -63,6 +65,9 @@ export default function Database() {
     // Get All Students
     async function fetchAllStudents() {
         setLoading(true)
+
+        // Reset State
+        setStudents([])
 
         try {
             // Fetch
@@ -175,6 +180,12 @@ export default function Database() {
         )
     }
 
+    function StudentRowDisplaySkeleton() {
+        return (
+            <Skeleton className="StudentFrame"/>
+        )
+    }
+
     // Navigation Buttons & Pagination
     function PaginationInfo() {
         let pageNum = pageResult.totalPages > 0 ? pageResult.pageNumber + 1 : 0
@@ -282,7 +293,7 @@ export default function Database() {
                 {/* Search Bar */}
                 <SearchBar/>
                 {/* Content */}
-                <div>
+                <div className="StudentsPageContent">
                     <StudentRowHeader/>
                     {students.map((student, index) => {
                         return <StudentRowDisplay
@@ -290,6 +301,12 @@ export default function Database() {
                             data={student}
                             rowIndex={index}/>
                     })}
+                    {/* Loading */}
+                    {loading &&
+                        new Array(10).fill("").map((_, index) => {
+                            return <StudentRowDisplaySkeleton key={index}/>
+                        })
+                    }
                 </div>
                 <div className="NavigateButtonsRow">
                     <BackButton/>

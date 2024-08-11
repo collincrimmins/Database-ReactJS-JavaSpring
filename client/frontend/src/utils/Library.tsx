@@ -12,32 +12,27 @@ export const LoadingFrameFullScreen = ({loading} : LoadingFrameProps) => {
                 <MoonLoader
                     color={"#4287f5"}
                     loading={loading}
-                    radius={25}
-                    height={45}
-                    width={10}
-                    margin={25}
+                    size={25}
                 />
             </div>
         )
     }
 }
 
-export const LoadingFrameFill = ({loading} : LoadingFrameProps) => {
-    if (loading) {
-        return (
-            <div className="LoadingFrameFill">
-                <MoonLoader 
-                    className="LoadingFrame"
-                    color={"#4287f5"}
-                    loading={loading}
-                    radius={25}
-                    height={45}
-                    width={10}
-                    margin={25}
-                />
-            </div>
-        )
-    }
+export const LoadingFrameFill = () => {
+    return (
+        <div className="LoadingFrameFill">
+            <MoonLoader 
+                className="LoadingFrame"
+                color={"#4287f5"}
+                // radius={5}
+                // height={25}
+                // width={10}
+                size={25}
+                //margin={25}
+            />
+        </div>
+    )
 }
 
 // Functions
