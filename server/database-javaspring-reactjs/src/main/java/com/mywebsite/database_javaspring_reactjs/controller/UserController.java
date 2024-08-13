@@ -12,7 +12,7 @@ import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
 import com.mywebsite.database_javaspring_reactjs.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 public class UserController {
     @Autowired
     private UserService userService;

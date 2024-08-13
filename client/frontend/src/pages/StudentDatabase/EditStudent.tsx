@@ -46,7 +46,7 @@ export default function EditStudent() {
     async function fetchStudent() {
         try {
             // Fetch
-            const response = await fetch(`http://localhost:8080/students/student/${idQuery}`, {
+            const response = await fetch(`http://localhost:8080/v1/students/student/${idQuery}`, {
                 method: "GET"
             })
             if (!response.ok) {throw new Error()}
@@ -113,7 +113,7 @@ export default function EditStudent() {
                 lastName: last,
                 email: email,
             }
-            const response = await fetch(`http://localhost:8080/students/update/${idQuery}`, {
+            const response = await fetch(`http://localhost:8080/v1/students/update/${idQuery}`, {
                 method: "PUT",
                 headers: {
                     "Content-type": "application/json",

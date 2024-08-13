@@ -82,7 +82,7 @@ export default function AddStudent() {
                 lastName: last,
                 email: email,
             }
-            const response = await fetch("http://localhost:8080/students/new", {
+            const response = await fetch("http://localhost:8080/v1/students/new", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",

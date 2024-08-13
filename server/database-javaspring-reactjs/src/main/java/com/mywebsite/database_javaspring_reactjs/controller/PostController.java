@@ -12,7 +12,7 @@ import com.mywebsite.database_javaspring_reactjs.responses.SliceResponse;
 import com.mywebsite.database_javaspring_reactjs.service.PostService;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/v1/posts")
 public class PostController {
     @Autowired
     private PostService postService;

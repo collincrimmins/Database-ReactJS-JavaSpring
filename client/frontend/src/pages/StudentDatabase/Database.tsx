@@ -72,7 +72,7 @@ export default function Database() {
         try {
             // Fetch
             const params = new URLSearchParams(getSearchParams())
-            const response = await fetch(`http://localhost:8080/students?${params}`, {
+            const response = await fetch(`http://localhost:8080/v1/students?${params}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export default function Database() {
         
         let ID = data.id
         try {
-            const response = await fetch(`http://localhost:8080/students/delete/${ID}`, {
+            const response = await fetch(`http://localhost:8080/v1/students/delete/${ID}`, {
                 method: "DELETE",
                 headers: {
                     "Content-type": "application/json",

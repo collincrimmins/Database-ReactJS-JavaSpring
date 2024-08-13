@@ -17,7 +17,7 @@ import com.mywebsite.database_javaspring_reactjs.security.dto.TokenDTO;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1/auth")
 public class AuthController {
     @Autowired
     private JWTUserService jwtUserService;

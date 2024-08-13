@@ -22,7 +22,7 @@ interface SliceInfo {
     lastReadRecordID: number,
 }
 
-export default function ProfileComponent() {
+export default function Profile() {
     const [posts, setPosts] = useState<Post[]>([])
     const [sliceInfo, setSliceInfo] = useState<SliceInfo | null>(null)
     const [userProfiles, setUserProfiles] = useState<Map<Number, User>>(new Map())
@@ -42,26 +42,26 @@ export default function ProfileComponent() {
         fetchProfileUserInfo()
     }, [])
 
-    // [Posts] Check if new UserProfiles's need to be Fetched
+    // Check Posts for if new UserProfiles's need to be Loaded
     useEffect(() => {
         fetchListUserInfo()
         applyUserProfilesToPosts()
     }, [posts])
 
-    // [UserProfiles] Apply new UserProfile's to Existing Posts
+    // Apply new UserProfile's to Existing Posts
     useEffect(() => {
         applyUserProfilesToPosts()
     }, [userProfiles])
 
     // [id] Username has changed - reset page
-    useEffect(() => {
-        // Reset State
-        // setSliceInfo(null)
-        // setUserProfiles(new Map())
-        // setPosts([])
-    }, [id])
+    // useEffect(() => {
+    //     // Reset State
+    //     // setSliceInfo(null)
+    //     // setUserProfiles(new Map())
+    //     // setPosts([])
+    // }, [id])
 
-    // Get UserInfo for this Profile by Username
+    // Profile Header get the UserProfile
     async function fetchProfileUserInfo() {
         // Username request is null
         if (id == "") {return}
@@ -72,7 +72,7 @@ export default function ProfileComponent() {
             const params = new URLSearchParams({
                 username: id!
             })
-            const response = await fetch(`http://localhost:8080/users/info?${params}`, {
+            const response = await fetch(`http://localhost:8080/v1/users/info?${params}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default function ProfileComponent() {
         setLoadingProfileHeader(false)
     }
 
-    // Get Profile Feed
+    // Get Profile Posts
     async function fetchNextProfileFeed() {
         // Username request is null
         if (id == "") {return}
@@ -123,7 +123,7 @@ export default function ProfileComponent() {
             if (sliceInfo) {
                 body = {lastReadRecordID: sliceInfo.lastReadRecordID}
             }
-            const response = await fetch(`http://localhost:8080/posts/profilefeed/${username}`, {
+            const response = await fetch(`http://localhost:8080/v1/posts/profilefeed/${username}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -191,13 +191,12 @@ export default function ProfileComponent() {
             }
         })
         if (requestIDSet.size == 0) {
-            //setLoading(false)
             return
         }
 
         try {
             // Fetch
-            const response = await fetch(`http://localhost:8080/users/infolist`, {
+            const response = await fetch(`http://localhost:8080/v1/users/infolist`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -326,7 +325,7 @@ export default function ProfileComponent() {
                 authtoken: user.token,
                 text: postText,
             }
-            const response = await fetch(`http://localhost:8080/posts/create`, {
+            const response = await fetch(`http://localhost:8080/v1/posts/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

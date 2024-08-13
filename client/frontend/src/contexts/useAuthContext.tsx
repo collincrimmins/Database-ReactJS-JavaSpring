@@ -63,7 +63,7 @@ export function AuthProvider({children} : AuthProviderProps) {
             const body = {
                 token: token
             }
-            const response = await fetch(`http://localhost:8080/auth/checkToken`, {
+            const response = await fetch(`http://localhost:8080/v1/auth/checkToken`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -95,7 +95,7 @@ export function AuthProvider({children} : AuthProviderProps) {
             const body = {
                 token: token
             }
-            const response = await fetch(`http://localhost:8080/users/getmyprofile`, {
+            const response = await fetch(`http://localhost:8080/v1/users/getmyprofile`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

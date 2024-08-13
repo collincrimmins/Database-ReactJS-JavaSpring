@@ -10,7 +10,7 @@ import com.mywebsite.database_javaspring_reactjs.responses.PaginationResponse;
 import com.mywebsite.database_javaspring_reactjs.service.StudentService;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/v1/students")
 public class StudentController {
     @Autowired
     private StudentService studentService;
